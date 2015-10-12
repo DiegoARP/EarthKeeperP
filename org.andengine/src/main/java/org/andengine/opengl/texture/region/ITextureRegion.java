@@ -52,4 +52,6 @@ public interface ITextureRegion {
 	public ITexture getTexture();
 
 	public ITextureRegion deepCopy() throws DeepCopyNotSupportedException;
+
+
 }

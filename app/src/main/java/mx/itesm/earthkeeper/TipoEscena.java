@@ -10,6 +10,7 @@ public enum TipoEscena {
     ESCENA_MENU,
     ESCENA_ACERCA_DE,
     ESCENA_NUEVA,
+    ESCENA_HIST,
     ESCENA_JUEGO,
     ESCENA_JUEGO_DOS,
     ESCENA_FISICA

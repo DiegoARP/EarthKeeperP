@@ -7,12 +7,13 @@ import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.resolutionpolicy.FillResolutionPolicy;
-import org.andengine.engine.options.resolutionpolicy.FixedResolutionPolicy;
-import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
+//import org.andengine.engine.options.resolutionpolicy.FixedResolutionPolicy;
+//import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
 import org.andengine.entity.scene.Scene;
-import org.andengine.entity.util.FPSCounter;
+//import org.andengine.entity.util.FPSCounter;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
-
+//import android.view.animation.Animation;
+//import android.view.animation.AnimationUtils;
 import java.io.IOException;
 
 /*

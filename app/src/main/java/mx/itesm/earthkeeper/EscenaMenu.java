@@ -25,6 +25,8 @@ public class EscenaMenu extends EscenaBase
     private ITextureRegion regionBtnAcercaDe;
     private ITextureRegion regionBtnJugar;
     private ITextureRegion regionBtnNueva;
+    private ITextureRegion regionBtnHist;
+
 
     // Sprites sobre la escena
     private Sprite spriteFondo;
@@ -35,19 +37,22 @@ public class EscenaMenu extends EscenaBase
     private final int OPCION_ACERCA_DE = 0;
     private final int OPCION_JUGAR = 1;
     private final int OPCION_NUEVA = 2;
+    private final int OPCION_H = 3;
     // Botones de cada opción
     private ButtonSprite btnAcercaDe;
     private ButtonSprite btnJugar;
     private ButtonSprite btnNueva;
+    private ButtonSprite btnHist;
 
     @Override
     public void cargarRecursos() {
         // Fondo
-        regionFondo = cargarImagen("fondoMenu.jpg");
+        regionFondo = cargarImagen("CabinaFondo.jpg");
         // Botones del menú
         regionBtnAcercaDe = cargarImagen("btnAcercaDe.png");
         regionBtnNueva = cargarImagen("botonSI.jpg");
-        regionBtnJugar = cargarImagen("btnJugar.png");
+        regionBtnJugar = cargarImagen("BotonJuego.png");
+       // regionBtnHist = cargarImagen("btnJugar.png");
     }
 
     @Override
@@ -85,12 +90,16 @@ public class EscenaMenu extends EscenaBase
                 regionBtnJugar, actividadJuego.getVertexBufferObjectManager()), 1.5f, 1);
         IMenuItem opcionNueva = new ScaleMenuItemDecorator(new SpriteMenuItem(OPCION_NUEVA,
                 regionBtnNueva, actividadJuego.getVertexBufferObjectManager()), 1.5f, 1);
+       // IMenuItem opcionHist = new ScaleMenuItemDecorator(new SpriteMenuItem(OPCION_H,
+               // regionBtnHist, actividadJuego.getVertexBufferObjectManager()), 1.5f, 1);
+
 
 
         // Agrega las opciones al menú
         menu.addMenuItem(opcionAcercaDe);
         menu.addMenuItem(opcionJugar);
         menu.addMenuItem(opcionNueva);
+        //menu.addMenuItem(opcionHist);
 
         // Termina la configuración
         menu.buildAnimations();
@@ -100,6 +109,7 @@ public class EscenaMenu extends EscenaBase
         opcionAcercaDe.setPosition(-200, 0);
         opcionJugar.setPosition(200, 0);
         opcionNueva.setPosition(0,-200);
+       // opcionHist.setPosition(0,-300);
 
         // Registra el Listener para atender las opciones
         menu.setOnMenuItemClickListener(new MenuScene.IOnMenuItemClickListener() {
@@ -117,13 +127,20 @@ public class EscenaMenu extends EscenaBase
 
                     case OPCION_JUGAR:
                         // Mostrar la pantalla de juego
-
+                        admEscenas.crearEscenaJuego();
+                        admEscenas.setEscena(TipoEscena.ESCENA_JUEGO);
+                        admEscenas.liberarEscenaMenu();
                         break;
                    case OPCION_NUEVA:
                         admEscenas.crearEscenaNueva();
                         admEscenas.setEscena(TipoEscena.ESCENA_NUEVA);
                         admEscenas.liberarEscenaMenu();
                         break;
+                   // case OPCION_H:
+                     //   admEscenas.crearEscenaNueva();
+                       // admEscenas.setEscena(TipoEscena.ESCENA_HIST);
+                        //admEscenas.liberarEscenaMenu();
+                        //break;
 
                 }
                 return true;
