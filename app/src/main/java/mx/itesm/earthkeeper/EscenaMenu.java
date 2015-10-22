@@ -47,12 +47,12 @@ public class EscenaMenu extends EscenaBase
     @Override
     public void cargarRecursos() {
         // Fondo
-        regionFondo = cargarImagen("fondoMenu.jpg");
+        regionFondo = cargarImagen("PantallaConsola_OK.jpg");
         // Botones del menú
-        regionBtnAcercaDe = cargarImagen("btnAcercaDe.png");
-        regionBtnNueva = cargarImagen("botonSI.jpg");
-        regionBtnJugar = cargarImagen("BotonJuego.png");
-       // regionBtnHist = cargarImagen("btnJugar.png");
+        regionBtnAcercaDe = cargarImagen("Boton_CREDITOS.png");
+        regionBtnNueva = cargarImagen("Boton_SETTINGS_OK.png");
+        regionBtnJugar = cargarImagen("BotonPLAY_OK.png");
+        // regionBtnHist = cargarImagen("btnJugar.png");
     }
 
     @Override
@@ -66,7 +66,7 @@ public class EscenaMenu extends EscenaBase
         setBackgroundEnabled(true);
 
         // Mostrar un recuadro atrás del menú
-        agregarFondoMenu();
+       // agregarFondoMenu();
         // Mostrar opciones de menú
         agregarMenu();
     }
@@ -106,9 +106,9 @@ public class EscenaMenu extends EscenaBase
         menu.setBackgroundEnabled(false);   // Completamente transparente
 
         // Ubicar las opciones DENTRO del menú. El centro del menú es (0,0)
-        opcionAcercaDe.setPosition(-200, 0);
-        opcionJugar.setPosition(200, 0);
-        opcionNueva.setPosition(0,-200);
+        opcionAcercaDe.setPosition(435, -265);
+        opcionJugar.setPosition(0,-240);
+        opcionNueva.setPosition(-350,-220);
        // opcionHist.setPosition(0,-300);
 
         // Registra el Listener para atender las opciones

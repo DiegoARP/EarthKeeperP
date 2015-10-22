@@ -12,20 +12,36 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 public class EscenaJuego extends EscenaBase {
 
 
+
     // Regiones para imágenes
     private ITextureRegion regionFondo;
+    private ITextureRegion Galaxias;
+    private ITextureRegion Tierra;
+    private ITextureRegion Marco;
     // Sprite para el fondo
     private Sprite spriteFondo;
+    private Sprite spriteGalaxias;
+    private Sprite spriteTierra;
+    private Sprite spriteMarco;
 
     @Override
     public void cargarRecursos() {
-        regionFondo = cargarImagen("PantallaEstrellas.jpg");
+        regionFondo = cargarImagen("FondoNegro.jpg");
+        Galaxias = cargarImagen("Galaxias_Juntas.png");
+        Tierra = cargarImagen("Tierra.png");
+        Marco = cargarImagen("PantallaMarcoFINAL.png");
     }
 
     @Override
     public void crearEscena() {
         spriteFondo = cargarSprite(ControlJuego.ANCHO_CAMARA/2, ControlJuego.ALTO_CAMARA/2, regionFondo);
+        spriteGalaxias = cargarSprite(ControlJuego.ANCHO_CAMARA/2, ControlJuego.ALTO_CAMARA/2, Galaxias);
+        spriteTierra = cargarSprite(ControlJuego.ANCHO_CAMARA/2, ControlJuego.ALTO_CAMARA/2, Tierra);
+        spriteMarco = cargarSprite(ControlJuego.ANCHO_CAMARA/2, ControlJuego.ALTO_CAMARA/2, Marco);
         attachChild(spriteFondo);
+        attachChild(spriteGalaxias);
+        attachChild(spriteTierra);
+        attachChild(spriteMarco);
     }
 
     @Override
@@ -50,7 +66,13 @@ public class EscenaJuego extends EscenaBase {
     @Override
     public void liberarRecursos() {
         regionFondo.getTexture().unload();
+        Galaxias.getTexture().unload();
+        Tierra.getTexture().unload();
+        Marco.getTexture().unload();
         regionFondo = null;
+        Galaxias = null;
+        Tierra = null;
+        Marco = null;
     }
 
 
