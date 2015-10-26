@@ -16,6 +16,7 @@ public class Enemigos {
     private Sprite sprite;
 
     public Enemigos(Sprite sprite) {
+
         this.sprite = sprite;
     }
 
@@ -27,8 +28,32 @@ public class Enemigos {
         this.sprite = sprite;
     }
 
-    public void mover(int dx, int dy) {
+    /*public void mover(int dx, int dy) {
+
         sprite.setPosition( sprite.getX()+dx, sprite.getY()+dy );
+    }*/
+
+    public void mover(float targetX, float targetY)
+    {
+        float xPos = sprite.getX();
+        float yPos = sprite.getY();
+        if (xPos > targetX)
+        {
+            xPos--;
+        }
+        else if (xPos < targetX)
+        {
+            xPos++;
+        }
+        if (yPos > targetY)
+        {
+            yPos--;
+        }
+        else if (yPos < targetY)
+        {
+            yPos++;
+        }
+        sprite.setPosition( xPos, yPos );
     }
 
 
