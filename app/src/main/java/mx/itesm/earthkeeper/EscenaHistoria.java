@@ -20,7 +20,7 @@ public class EscenaHistoria extends EscenaBase {
 
     @Override
     public void cargarRecursos() {
-        regionFondo = cargarImagen("creditosNuevo.jpg");
+        regionFondo = cargarImagen("Pantall_aCreditos.png");
     }
 
     @Override

@@ -63,7 +63,7 @@ public class EscenaJuego extends EscenaBase {
 
     @Override
     public void cargarRecursos() {
-        regionFondo = cargarImagen("FondoNegro.jpg");
+        regionFondo = cargarImagen("FondoC.jpg");
         Galaxias = cargarImagen("Galaxias_Juntas.png");
         Tierra = cargarImagen("Tierra_NUEVA.png");
         Marco = cargarImagen("PantallaMarcoFINAL.png");
@@ -79,11 +79,26 @@ public class EscenaJuego extends EscenaBase {
     @Override
 
     public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
-        this.setPosition(pSceneTouchEvent.getX() - this.getWidth() / 2, pSceneTouchEvent.getY() - this.getHeight() / 2);
+      /*  listaP.add(regionAmarillo);
+        listaP.add(regionVerde);
+        listaP.add(regionAzul);
+        listaP.add(regionRojo);*/
+       /* for (int i  = 0; i<=3; i++){*/
+
+           /* Sprite spriteEnemigo = cargarSprite(ControlJuego.ANCHO_CAMARA +  listaP.get(i).getWidth(),
+                    (float) (Math.random() * ControlJuego.ALTO_CAMARA -  listaP.get(i).getHeight()) +
+                            listaP.get(i).getHeight(),  listaP.get(i));
+            Enemigos nuevoEnemigo = new Enemigos(spriteEnemigo);
+            listaEnemigos.add(nuevoEnemigo);*/
+          // this.setPosition(pSceneTouchEvent.getX() - this.getWidth() / 2, pSceneTouchEvent.getY() - this.getHeight() / 2);
+           // registerTouchArea( nuevoEnemigo.getSpriteEnemigo());
+        //}
+
+
         return true;
     }
 
-    public boolean onTouchEvent(MotionEvent event) {
+  /*  public boolean onTouchEvent(MotionEvent event) {
         int myEventAction = event.getAction();
 
         float X = event.getX();
@@ -99,7 +114,7 @@ public class EscenaJuego extends EscenaBase {
                 break;
         }
         return true;
-    }
+    }*/
 
 
 private void crearEnemigos() {
@@ -232,6 +247,10 @@ private void crearEnemigos() {
             //nuevoEnemigo.mover(0,10);
             listaEnemigos.add(nuevoEnemigo);	//	Lo	AGREGA	a	la	escena
             boolean mGrabbed = false;
+
+
+
+
 
 
 
