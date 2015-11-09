@@ -49,8 +49,8 @@ public class EscenaMenu extends EscenaBase
         // Fondo
         regionFondo = cargarImagen("Pantalla_Consola-FINAL.jpg");
         // Botones del menú
-        regionBtnAcercaDe = cargarImagen("Boton_CREDITOS.png");
-        regionBtnNueva = cargarImagen("Boton_SETTINGS_OK.png");
+        regionBtnAcercaDe = cargarImagen("Gallery_GO.png");
+        regionBtnNueva = cargarImagen("Settings_GO.png");
         regionBtnJugar = cargarImagen("PlayAgain_GO.png");
         // regionBtnHist = cargarImagen("btnJugar.png");
     }
@@ -106,8 +106,8 @@ public class EscenaMenu extends EscenaBase
         menu.setBackgroundEnabled(false);   // Completamente transparente
 
         // Ubicar las opciones DENTRO del menú. El centro del menú es (0,0)
-        opcionAcercaDe.setPosition(435, -265);
-        opcionJugar.setPosition(0,-240);
+        opcionAcercaDe.setPosition(600, -265);
+        opcionJugar.setPosition(0,-320);
         opcionNueva.setPosition(-350,-220);
        // opcionHist.setPosition(0,-300);
 

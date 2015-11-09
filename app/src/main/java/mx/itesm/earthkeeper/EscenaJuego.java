@@ -4,6 +4,8 @@ package mx.itesm.earthkeeper;
  * Created by cooldarp on 10/11/2015.
  */
 
+import android.graphics.Point;
+import android.view.Display;
 import android.view.MotionEvent;
 import android.widget.Toast;
 
@@ -18,6 +20,7 @@ import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.input.touch.controller.MultiTouch;
 import org.andengine.input.touch.controller.MultiTouchController;
+import org.andengine.opengl.texture.ITexture;
 import org.andengine.opengl.texture.region.ITextureRegion;
 
 import java.util.ArrayList;
@@ -33,11 +36,19 @@ public class EscenaJuego extends EscenaBase {
     private ITextureRegion Galaxias;
     private ITextureRegion Tierra;
     private ITextureRegion Marco;
+    private ITextureRegion GalaxiaVerde;
+    private ITextureRegion GalaxiaRojo;
+    private ITextureRegion GalaxiaAmarillo;
+    private ITextureRegion GalaxiaAzul;
     // Sprite para el fondo
     private Sprite spriteFondo;
     private Sprite spriteGalaxias;
     private Sprite spriteTierra;
     private Sprite spriteMarco;
+    private Sprite spriteGalaxiaVerde;
+    private Sprite spriteGalaxiaAzul;
+    private Sprite spriteGalaxiaAmarillo;
+    private Sprite spriteGalaxiaRojo;
 
     private int VIDA=3;
 
@@ -72,31 +83,39 @@ public class EscenaJuego extends EscenaBase {
         regionAmarillo = cargarImagen("Circular_Amarilo.png");
         regionRojo = cargarImagen("Circular_Rojo.png");
         regionFin = cargarImagen("Consola_GAMEOVER.png");
+        GalaxiaVerde = cargarImagen("PruebaVerde.jpg");
+        GalaxiaRojo = cargarImagen("PruebaRojo.jpg");
+        GalaxiaAmarillo = cargarImagen("PruebaAmarillo.jpg");
+        GalaxiaAzul = cargarImagen("PruebaAzul.jpg");
+
     }
 
 
 
-    @Override
+   /* @Override
 
     public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
-      /*  listaP.add(regionAmarillo);
+        listaP.add(regionAmarillo);
         listaP.add(regionVerde);
         listaP.add(regionAzul);
-        listaP.add(regionRojo);*/
-       /* for (int i  = 0; i<=3; i++){*/
+        listaP.add(regionRojo);
+        for (int i  = 0; i<=3; i++){
 
-           /* Sprite spriteEnemigo = cargarSprite(ControlJuego.ANCHO_CAMARA +  listaP.get(i).getWidth(),
+            Sprite spriteEnemigo = cargarSprite(ControlJuego.ANCHO_CAMARA +  listaP.get(i).getWidth(),
                     (float) (Math.random() * ControlJuego.ALTO_CAMARA -  listaP.get(i).getHeight()) +
                             listaP.get(i).getHeight(),  listaP.get(i));
             Enemigos nuevoEnemigo = new Enemigos(spriteEnemigo);
-            listaEnemigos.add(nuevoEnemigo);*/
-          // this.setPosition(pSceneTouchEvent.getX() - this.getWidth() / 2, pSceneTouchEvent.getY() - this.getHeight() / 2);
-           // registerTouchArea( nuevoEnemigo.getSpriteEnemigo());
-        //}
+            listaEnemigos.add(nuevoEnemigo);
+           this.setPosition(pSceneTouchEvent.getX() - this.getWidth() / 2, pSceneTouchEvent.getY() - this.getHeight() / 2);
+            registerTouchArea(nuevoEnemigo.getSpriteEnemigo());
+            setTouchAreaBindingOnActionDownEnabled(true);
+
+            attachChild(nuevoEnemigo.getSpriteEnemigo());
+        }
 
 
         return true;
-    }
+    }/*
 
   /*  public boolean onTouchEvent(MotionEvent event) {
         int myEventAction = event.getAction();
@@ -152,14 +171,27 @@ private void crearEnemigos() {
     public void crearEscena() {
         listaEnemigos = new ArrayList<>();
         listaP = new ArrayList<>();
+
+
+        spriteGalaxiaVerde = cargarSprite(0,0,GalaxiaVerde);
+        spriteGalaxiaAzul = cargarSprite(ControlJuego.ANCHO_CAMARA,0,GalaxiaAzul);
+        spriteGalaxiaRojo = cargarSprite(0,ControlJuego.ALTO_CAMARA,GalaxiaRojo);
+        spriteGalaxiaAmarillo = cargarSprite(ControlJuego.ANCHO_CAMARA,ControlJuego.ALTO_CAMARA,GalaxiaAmarillo);
+
+
+
         spriteFondo = cargarSprite(ControlJuego.ANCHO_CAMARA/2, ControlJuego.ALTO_CAMARA/2, regionFondo);
-        spriteGalaxias = cargarSprite(ControlJuego.ANCHO_CAMARA/2, ControlJuego.ALTO_CAMARA/2, Galaxias);
+        spriteGalaxias = cargarSprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2, Galaxias);
         spriteTierra = cargarSprite(ControlJuego.ANCHO_CAMARA/2, ControlJuego.ALTO_CAMARA/2, Tierra);
         spriteMarco = cargarSprite(ControlJuego.ANCHO_CAMARA/2, ControlJuego.ALTO_CAMARA/2, Marco);
         attachChild(spriteFondo);
         attachChild(spriteGalaxias);
         attachChild(spriteTierra);
         attachChild(spriteMarco);
+        attachChild(spriteGalaxiaVerde);
+        attachChild(spriteGalaxiaRojo);
+        attachChild(spriteGalaxiaAmarillo);
+        attachChild(spriteGalaxiaAzul);
         crearEnemigos();
 
 
@@ -192,6 +224,7 @@ private void crearEnemigos() {
     @Override
     public void liberarRecursos() {
         regionFondo.getTexture().unload();
+        regionFin.getTexture().unload();
         Galaxias.getTexture().unload();
         Tierra.getTexture().unload();
         Marco.getTexture().unload();
@@ -207,6 +240,7 @@ private void crearEnemigos() {
         regionRojo = null;
         regionAmarillo = null;
         regionAzul = null;
+        regionFin=null;
     }
 
 
@@ -239,11 +273,35 @@ private void crearEnemigos() {
             int r3 = ran.nextInt(ControlJuego.ALTO_CAMARA - 0 + 1) + 0;
             int r4 = ran.nextInt(ControlJuego.ALTO_CAMARA - 0 + 1) + 0;
             int var = ran.nextInt(4 - 1 + 1) + 1;
-            Sprite spriteEnemigo	=	cargarSprite(ControlJuego.ANCHO_CAMARA+listaP.get(z).getWidth(),
+            /*final Sprite spriteEnemigo	=	cargarSprite(ControlJuego.ANCHO_CAMARA+listaP.get(z).getWidth(),
                     (float)(Math.random()*ControlJuego.ALTO_CAMARA-listaP.get(z).getHeight())	+
-                            listaP.get(z).getHeight(),listaP.get(z));
+                            listaP.get(z).getHeight(),listaP.get(z)) ;*/
+            Sprite spriteEnemigo = new Sprite(ControlJuego.ANCHO_CAMARA+listaP.get(z).getWidth(),
+                    (float)(Math.random()*ControlJuego.ALTO_CAMARA-listaP.get(z).getHeight())  +
+                            listaP.get(z).getHeight(),listaP.get(z),actividadJuego.getVertexBufferObjectManager()) {
+
+                @Override
+                public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
+
+                    this.setPosition(pSceneTouchEvent.getX() - this.getWidth() / 2, pSceneTouchEvent.getY() - this.getHeight() / 2);
+
+                    return true; //super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
+                }
+            };
+
+
+
+
+
+
+
+
 
             Enemigos nuevoEnemigo = new Enemigos(spriteEnemigo);
+
+            registerTouchArea(nuevoEnemigo.getSpriteEnemigo());
+            setTouchAreaBindingOnActionDownEnabled(true);
+            attachChild(nuevoEnemigo.getSpriteEnemigo());
             //nuevoEnemigo.mover(0,10);
             listaEnemigos.add(nuevoEnemigo);	//	Lo	AGREGA	a	la	escena
             boolean mGrabbed = false;
@@ -258,11 +316,7 @@ private void crearEnemigos() {
 
 
 
-
-        registerTouchArea(nuevoEnemigo.getSpriteEnemigo());
-            setTouchAreaBindingOnActionDownEnabled(true);
-
-            attachChild(nuevoEnemigo.getSpriteEnemigo());	//	Lo	AGREGA	a	la	lista
+       	//	Lo	AGREGA	a	la	lista
 
 
 
@@ -306,9 +360,39 @@ private void crearEnemigos() {
             }
             //	Revisa	el	choque	del	personaje	con	el	enemigo
 
+            if (enemigo.getSpriteEnemigo().getTextureRegion()==regionVerde) {
+                if (spriteGalaxiaVerde.collidesWith(enemigo.getSpriteEnemigo())){
+                    detachChild(enemigo.getSpriteEnemigo());
+                    listaEnemigos.remove(enemigo);
+                }
+            }
+
+            if (enemigo.getSpriteEnemigo().getTextureRegion()==regionAzul) {
+                if (spriteGalaxiaAzul.collidesWith(enemigo.getSpriteEnemigo())){
+                    detachChild(enemigo.getSpriteEnemigo());
+                    listaEnemigos.remove(enemigo);
+                }
+            }
+
+            if (enemigo.getSpriteEnemigo().getTextureRegion()==regionAmarillo) {
+                if (spriteGalaxiaAmarillo.collidesWith(enemigo.getSpriteEnemigo())){
+                    detachChild(enemigo.getSpriteEnemigo());
+                    listaEnemigos.remove(enemigo);
+                }
+            }
+
+            if (enemigo.getSpriteEnemigo().getTextureRegion()==regionRojo) {
+                if (spriteGalaxiaRojo.collidesWith(enemigo.getSpriteEnemigo())){
+                    detachChild(enemigo.getSpriteEnemigo());
+                    listaEnemigos.remove(enemigo);
+                }
+            }
+
+
+
             if (spriteTierra.collidesWith(enemigo.getSpriteEnemigo())) {
                 detachChild(enemigo.getSpriteEnemigo());
-                //enemigos.remove(enemigo);
+                //listaEnemigos.remove(enemigo);
                 vida--;
                 if (vida == 0) {
                     juegoCorriendo = false;
