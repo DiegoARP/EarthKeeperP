@@ -26,7 +26,7 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import java.util.ArrayList;
 import java.util.Random;
 
-
+//RECUPERACION
 public class EscenaJuego extends EscenaBase {
 
     private boolean juegoCorriendo = true;
