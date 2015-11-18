@@ -38,7 +38,7 @@ public class EscenaJuego extends EscenaBase {
     private boolean juegoCorriendo = true;
     private Camera mCamera;
     // Regiones para imágenes
-    private ITextureRegion regionFondo;
+   // private ITextureRegion regionFondo;
     private ITextureRegion Galaxias;
     private ITextureRegion Tierra;
     private ITextureRegion Marco;
@@ -50,7 +50,7 @@ public class EscenaJuego extends EscenaBase {
     private ITextureRegion Vida_dos;
     private ITextureRegion Vida_tres;
     // Sprite para el fondo
-    private Sprite spriteFondo;
+   // private Sprite spriteFondo;
     private Sprite spriteGalaxias;
     private Sprite spriteTierra;
     private Sprite spriteMarco;
@@ -86,10 +86,10 @@ public class EscenaJuego extends EscenaBase {
     private float tiempoEnemigos =	0;				//	Contador
     private float	LIMITE_TIEMPO	=	2.5f;		//	Cada	2.5s	se	crea
     //	Sprite	animado
-    /*
+
     private AnimatedSprite spriteFondo;		//	Sprite
     private TiledTextureRegion regionFondo;		//	Región
-*/
+
 
 
 
@@ -97,8 +97,8 @@ public class EscenaJuego extends EscenaBase {
 
     @Override
     public void cargarRecursos() {
-        regionFondo = cargarImagen("Fondo_Anim.png");
-        //regionFondo	=	cargarImagenMosaico("Fondo_Anim.png", 5306, 800,	1,	4);
+        //regionFondo = cargarImagen("Fondo_Anim.png");
+        regionFondo	=	cargarImagenMosaico("Fondo_Anim.png", 5306, 800,	1,	4);
         GalaxiaVerde = cargarImagen("Ga_T.jpg");
         GalaxiaRojo = cargarImagen("Ga_T.jpg");
         GalaxiaAmarillo = cargarImagen("Ga_T.jpg");
@@ -235,14 +235,14 @@ private void crearEnemigos() {
         spriteGalaxiaRojo = cargarSprite(0,ControlJuego.ALTO_CAMARA, GalaxiaRojo);
         spriteGalaxiaAmarillo = cargarSprite(ControlJuego.ANCHO_CAMARA,ControlJuego.ALTO_CAMARA,GalaxiaAmarillo);
 
-        /*
+
         spriteFondo	=	new	AnimatedSprite(ControlJuego.ANCHO_CAMARA/2,
                 ControlJuego.ALTO_CAMARA/2,	regionFondo,
                 actividadJuego.getVertexBufferObjectManager());
         spriteFondo.animate(200);
-        */
 
-        spriteFondo = cargarSprite(ControlJuego.ANCHO_CAMARA/2, ControlJuego.ALTO_CAMARA/2, regionFondo);
+
+        //spriteFondo = cargarSprite(ControlJuego.ANCHO_CAMARA/2, ControlJuego.ALTO_CAMARA/2, regionFondo);
         //Fondo animado
         AutoParallaxBackground fondoAnimado	=	new	AutoParallaxBackground(1,1,1,5);
         fondoAnimado.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(-3, spriteFondo));
