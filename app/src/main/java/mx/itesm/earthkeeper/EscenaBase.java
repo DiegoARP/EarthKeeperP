@@ -5,10 +5,19 @@ import android.util.Log;
 import org.andengine.engine.camera.Camera;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.Sprite;
+import org.andengine.opengl.font.Font;
+import org.andengine.opengl.font.FontFactory;
 import org.andengine.opengl.texture.ITexture;
+import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
+import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
+import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
+import org.andengine.opengl.texture.atlas.bitmap.source.IBitmapTextureAtlasSource;
+import org.andengine.opengl.texture.atlas.buildable.builder.BlackPawnTextureAtlasBuilder;
+import org.andengine.opengl.texture.atlas.buildable.builder.ITextureAtlasBuilder;
 import org.andengine.opengl.texture.bitmap.AssetBitmapTexture;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.TextureRegionFactory;
+import org.andengine.opengl.texture.region.TiledTextureRegion;
 import org.andengine.opengl.util.GLState;
 
 
@@ -63,6 +72,38 @@ public abstract class EscenaBase extends Scene
             }
         };
     }
+
+
+    protected Font cargarFont(String archivo, int tamanio, int color, String letras) {
+        // La imagen que contiene cada símbolo
+        final ITexture fontTexture = new BitmapTextureAtlas(actividadJuego.getEngine().getTextureManager(),512,256);
+        // Carga el archivo, tamaño 56, antialias y color
+        Font tipoLetra = FontFactory.createFromAsset(actividadJuego.getEngine().getFontManager(),
+                fontTexture, actividadJuego.getAssets(), archivo, tamanio, true, color);
+        tipoLetra.load();
+        tipoLetra.prepareLetters(letras.toCharArray());
+
+        return tipoLetra;
+    }
+
+
+    protected TiledTextureRegion cargarImagenMosaico(String	archivo,	int	ancho,	int	alto,	int
+            renglones,	int	columnas)	{
+        //	Carga	las	imágenes	para	el	sprite	Animado
+        BuildableBitmapTextureAtlas texturaMosaico	=	new
+                BuildableBitmapTextureAtlas(actividadJuego.getTextureManager(),ancho,alto);
+        TiledTextureRegion region	=	BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(
+                texturaMosaico, actividadJuego, archivo, columnas, renglones);
+        texturaMosaico.load();
+        try	{
+            texturaMosaico.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource,
+                                BitmapTextureAtlas>(0,	0,	0));
+        }	catch	(ITextureAtlasBuilder.TextureAtlasBuilderException	e)	{
+            Log.d("cargarImagenMosaico()",	"No	se	puede	cargar	la	imagen:	"	+	archivo);
+        }
+        return region;
+    }
+
 
     // Métodos abstractos
     public abstract void cargarRecursos();  // Carga imágenes/audio/música/videos/etc.

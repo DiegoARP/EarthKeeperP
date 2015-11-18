@@ -15,13 +15,19 @@ import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
 import org.andengine.entity.modifier.MoveModifier;
+import org.andengine.entity.primitive.Rectangle;
+import org.andengine.entity.scene.background.AutoParallaxBackground;
+import org.andengine.entity.scene.background.ParallaxBackground;
 import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.entity.sprite.Sprite;
+import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.input.touch.controller.MultiTouch;
 import org.andengine.input.touch.controller.MultiTouchController;
+import org.andengine.opengl.font.IFont;
 import org.andengine.opengl.texture.ITexture;
 import org.andengine.opengl.texture.region.ITextureRegion;
+import org.andengine.opengl.texture.region.TiledTextureRegion;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -40,6 +46,9 @@ public class EscenaJuego extends EscenaBase {
     private ITextureRegion GalaxiaRojo;
     private ITextureRegion GalaxiaAmarillo;
     private ITextureRegion GalaxiaAzul;
+    private ITextureRegion Vida_uno;
+    private ITextureRegion Vida_dos;
+    private ITextureRegion Vida_tres;
     // Sprite para el fondo
     private Sprite spriteFondo;
     private Sprite spriteGalaxias;
@@ -49,10 +58,20 @@ public class EscenaJuego extends EscenaBase {
     private Sprite spriteGalaxiaAzul;
     private Sprite spriteGalaxiaAmarillo;
     private Sprite spriteGalaxiaRojo;
+    private Sprite spriteVida1;
+    private Sprite spriteVida2;
+    private Sprite spriteVida3;
+    //VIDA
+    private int ANCHO_VIDA;
+    private int vida;
+    private Rectangle rectVida;
+    private Rectangle rectVidaActual;
 
     private int VIDA=3;
-
-
+    //Puntos
+    private Text txtPuntos;
+    private int puntos;
+    private IFont fontMonster;
 
     //	Enemigos
     private ArrayList<Enemigos> listaEnemigos;
@@ -66,7 +85,11 @@ public class EscenaJuego extends EscenaBase {
     //	Tiempo	para	generar	enemigos
     private float tiempoEnemigos =	0;				//	Contador
     private float	LIMITE_TIEMPO	=	2.5f;		//	Cada	2.5s	se	crea
-
+    //	Sprite	animado
+    /*
+    private AnimatedSprite spriteFondo;		//	Sprite
+    private TiledTextureRegion regionFondo;		//	Región
+*/
 
 
 
@@ -74,19 +97,25 @@ public class EscenaJuego extends EscenaBase {
 
     @Override
     public void cargarRecursos() {
-        regionFondo = cargarImagen("FondoC.jpg");
+        regionFondo = cargarImagen("Fondo_Anim.png");
+        //regionFondo	=	cargarImagenMosaico("Fondo_Anim.png", 5306, 800,	1,	4);
+        GalaxiaVerde = cargarImagen("Ga_T.jpg");
+        GalaxiaRojo = cargarImagen("Ga_T.jpg");
+        GalaxiaAmarillo = cargarImagen("Ga_T.jpg");
+        GalaxiaAzul = cargarImagen("Ga_T.jpg");
         Galaxias = cargarImagen("Galaxias_Juntas.png");
         Tierra = cargarImagen("Tierra_NUEVA.png");
-        Marco = cargarImagen("PantallaMarcoFINAL.png");
+        Marco = cargarImagen("MARCO-FINAL-REDONDO.png");
         regionVerde = cargarImagen("Circular_Verde.png");
         regionAzul = cargarImagen("Circular_Azul.png");
         regionAmarillo = cargarImagen("Circular_Amarilo.png");
         regionRojo = cargarImagen("Circular_Rojo.png");
         regionFin = cargarImagen("Consola_GAMEOVER.png");
-        GalaxiaVerde = cargarImagen("PruebaVerde.jpg");
-        GalaxiaRojo = cargarImagen("PruebaRojo.jpg");
-        GalaxiaAmarillo = cargarImagen("PruebaAmarillo.jpg");
-        GalaxiaAzul = cargarImagen("PruebaAzul.jpg");
+        Vida_uno = cargarImagen("VIDA_1.png");
+        Vida_dos = cargarImagen("VIDA_2.png");
+        Vida_tres = cargarImagen("VIDA_3.png");
+
+        fontMonster = cargarFont("OCR.ttf", 32, 0xFFFFFFFF,"Puntos: 0123456789");
 
     }
 
@@ -135,6 +164,34 @@ public class EscenaJuego extends EscenaBase {
         return true;
     }*/
 
+    private void agregarVida() {
+        // Vida
+        ANCHO_VIDA = ControlJuego.ANCHO_CAMARA/2;
+        //vida = 100; // %
+        // Fondo
+        rectVida = new Rectangle(ControlJuego.ANCHO_CAMARA/2, ControlJuego.ALTO_CAMARA-50,
+                ANCHO_VIDA+10,ANCHO_VIDA/8,actividadJuego.getVertexBufferObjectManager());
+        rectVida.setColor(0, 0, 0, 0.4f);
+        attachChild(rectVida);
+        // Nivel
+        rectVidaActual = new Rectangle(ControlJuego.ANCHO_CAMARA/2, ControlJuego.ALTO_CAMARA-50,
+                ANCHO_VIDA,ANCHO_VIDA/8,actividadJuego.getVertexBufferObjectManager());
+        rectVidaActual.setColor(0, 1, 0);
+
+        attachChild(rectVidaActual);
+    }
+
+    private void agregarTextoPuntos() {
+        txtPuntos = new Text(ControlJuego.ANCHO_CAMARA-440,ControlJuego.ALTO_CAMARA-66,
+                fontMonster," 0          ",actividadJuego.getVertexBufferObjectManager());
+        attachChild(txtPuntos);
+    }
+
+    private void actualizarPuntos() {
+        txtPuntos.setText(": " + puntos);
+    }
+
+
 
 private void crearEnemigos() {
         listaP.add(regionAmarillo);
@@ -172,33 +229,45 @@ private void crearEnemigos() {
         listaEnemigos = new ArrayList<>();
         listaP = new ArrayList<>();
 
-
+        spriteGalaxias = cargarSprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2, Galaxias);
         spriteGalaxiaVerde = cargarSprite(0,0,GalaxiaVerde);
         spriteGalaxiaAzul = cargarSprite(ControlJuego.ANCHO_CAMARA,0,GalaxiaAzul);
-        spriteGalaxiaRojo = cargarSprite(0,ControlJuego.ALTO_CAMARA,GalaxiaRojo);
+        spriteGalaxiaRojo = cargarSprite(0,ControlJuego.ALTO_CAMARA, GalaxiaRojo);
         spriteGalaxiaAmarillo = cargarSprite(ControlJuego.ANCHO_CAMARA,ControlJuego.ALTO_CAMARA,GalaxiaAmarillo);
 
-
+        /*
+        spriteFondo	=	new	AnimatedSprite(ControlJuego.ANCHO_CAMARA/2,
+                ControlJuego.ALTO_CAMARA/2,	regionFondo,
+                actividadJuego.getVertexBufferObjectManager());
+        spriteFondo.animate(200);
+        */
 
         spriteFondo = cargarSprite(ControlJuego.ANCHO_CAMARA/2, ControlJuego.ALTO_CAMARA/2, regionFondo);
-        spriteGalaxias = cargarSprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2, Galaxias);
+        //Fondo animado
+        AutoParallaxBackground fondoAnimado	=	new	AutoParallaxBackground(1,1,1,5);
+        fondoAnimado.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(-3, spriteFondo));
+        setBackground(fondoAnimado);
+        //
+
         spriteTierra = cargarSprite(ControlJuego.ANCHO_CAMARA/2, ControlJuego.ALTO_CAMARA/2, Tierra);
         spriteMarco = cargarSprite(ControlJuego.ANCHO_CAMARA/2, ControlJuego.ALTO_CAMARA/2, Marco);
+        spriteVida1 = cargarSprite(ControlJuego.ANCHO_CAMARA-300,ControlJuego.ALTO_CAMARA-100,Vida_uno);
         attachChild(spriteFondo);
-        attachChild(spriteGalaxias);
-        attachChild(spriteTierra);
-        attachChild(spriteMarco);
         attachChild(spriteGalaxiaVerde);
         attachChild(spriteGalaxiaRojo);
         attachChild(spriteGalaxiaAmarillo);
         attachChild(spriteGalaxiaAzul);
+        attachChild(spriteGalaxias);
+        attachChild(spriteTierra);
+        attachChild(spriteMarco);
+        attachChild(spriteVida1);
+
         crearEnemigos();
 
 
-
-
-        registerTouchArea(spriteTierra);
+        //registerTouchArea(spriteTierra);
         setTouchAreaBindingOnActionDownEnabled(true);
+        agregarTextoPuntos();
 
     }
 
@@ -232,6 +301,8 @@ private void crearEnemigos() {
         regionRojo.getTexture().unload();
         regionAmarillo.getTexture().unload();
         regionAzul.getTexture().unload();
+        Vida_uno.getTexture().unload();
+        Vida_uno = null;
         regionFondo = null;
         Galaxias = null;
         Tierra = null;
@@ -249,6 +320,7 @@ private void crearEnemigos() {
 
     @Override
     protected void onManagedUpdate(float pSecondsElapsed)	{
+
         int vida=3;
         listaP.add(regionAmarillo);
         listaP.add(regionVerde);
@@ -264,6 +336,8 @@ private void crearEnemigos() {
         //float posX = Tierra.getTextureX();
         //float posY = Tierra.getTextureY();
         super.onManagedUpdate(pSecondsElapsed);
+        actualizarPuntos();
+
         tiempoEnemigos	+=	pSecondsElapsed;		//	Acumular	tiempo
         if	(tiempoEnemigos>LIMITE_TIEMPO)	{	//	Se	cumplió	el	tiempo
             tiempoEnemigos	=	0;
@@ -362,13 +436,16 @@ private void crearEnemigos() {
 
             if (enemigo.getSpriteEnemigo().getTextureRegion()==regionVerde) {
                 if (spriteGalaxiaVerde.collidesWith(enemigo.getSpriteEnemigo())){
+                    puntos+=5;
                     detachChild(enemigo.getSpriteEnemigo());
                     listaEnemigos.remove(enemigo);
+
                 }
             }
 
             if (enemigo.getSpriteEnemigo().getTextureRegion()==regionAzul) {
                 if (spriteGalaxiaAzul.collidesWith(enemigo.getSpriteEnemigo())){
+                    puntos+=5;
                     detachChild(enemigo.getSpriteEnemigo());
                     listaEnemigos.remove(enemigo);
                 }
@@ -376,6 +453,7 @@ private void crearEnemigos() {
 
             if (enemigo.getSpriteEnemigo().getTextureRegion()==regionAmarillo) {
                 if (spriteGalaxiaAmarillo.collidesWith(enemigo.getSpriteEnemigo())){
+                    puntos+=5;
                     detachChild(enemigo.getSpriteEnemigo());
                     listaEnemigos.remove(enemigo);
                 }
@@ -383,6 +461,7 @@ private void crearEnemigos() {
 
             if (enemigo.getSpriteEnemigo().getTextureRegion()==regionRojo) {
                 if (spriteGalaxiaRojo.collidesWith(enemigo.getSpriteEnemigo())){
+                    puntos+=5;
                     detachChild(enemigo.getSpriteEnemigo());
                     listaEnemigos.remove(enemigo);
                 }
@@ -390,10 +469,16 @@ private void crearEnemigos() {
 
 
 
+
+
             if (spriteTierra.collidesWith(enemigo.getSpriteEnemigo())) {
                 detachChild(enemigo.getSpriteEnemigo());
                 //listaEnemigos.remove(enemigo);
                 vida--;
+                if (vida==2){
+                    Vida_uno.getTexture().unload();
+                    Vida_uno = null;
+                }
                 if (vida == 0) {
                     juegoCorriendo = false;
                     Sprite spriteFin = new Sprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2,

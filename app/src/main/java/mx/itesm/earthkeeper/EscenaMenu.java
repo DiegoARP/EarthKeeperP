@@ -104,11 +104,11 @@ public class EscenaMenu extends EscenaBase
         // Termina la configuración
         menu.buildAnimations();
         menu.setBackgroundEnabled(false);   // Completamente transparente
-
+        // acercaDe = galeria
         // Ubicar las opciones DENTRO del menú. El centro del menú es (0,0)
-        opcionAcercaDe.setPosition(600, -265);
+        opcionAcercaDe.setPosition(400, -100);
         opcionJugar.setPosition(0,-320);
-        opcionNueva.setPosition(-350,-220);
+        opcionNueva.setPosition(-420,-320);
        // opcionHist.setPosition(0,-300);
 
         // Registra el Listener para atender las opciones
