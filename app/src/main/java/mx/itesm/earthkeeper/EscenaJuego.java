@@ -546,8 +546,9 @@ private void crearEnemigos() {
 
 
 
-                Sprite spriteEnemigo = new Sprite(-100,
-                       1000, listaP.get(z), actividadJuego.getVertexBufferObjectManager()) {
+                Sprite spriteEnemigo = new Sprite(ControlJuego.ANCHO_CAMARA + listaP.get(z).getWidth(),
+                        (float) (Math.random() * ControlJuego.ALTO_CAMARA - listaP.get(z).getHeight()) +
+                                       listaP.get(z).getHeight(), listaP.get(z), actividadJuego.getVertexBufferObjectManager()) {
 
                     @Override
                     public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
