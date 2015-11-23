@@ -20,7 +20,7 @@ public class EscenaHistoria extends EscenaBase {
 
     @Override
     public void cargarRecursos() {
-        regionFondo = cargarImagen("Pantall_aCreditos.png");
+        regionFondo = cargarImagen("EARTHKEEPER-MASTER/Pantalla Settings/Pantalla_Settings Fondo.jpg");
     }
 
     @Override
@@ -43,12 +43,12 @@ public class EscenaHistoria extends EscenaBase {
         // Regresar al menú principal
         admEscenas.crearEscenaMenu();
         admEscenas.setEscena(TipoEscena.ESCENA_MENU);
-        admEscenas.liberarEscenaNueva();
+        admEscenas.liberarEscenaSettings();
     }
 
     @Override
     public TipoEscena getTipoEscena() {
-        return TipoEscena.ESCENA_NUEVA;
+        return TipoEscena.ESCENA_SETTINGS;
     }
 
     @Override

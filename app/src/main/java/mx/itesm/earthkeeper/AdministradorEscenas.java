@@ -20,6 +20,7 @@ public class AdministradorEscenas
     private EscenaBase escenaAcercaDe;
     private EscenaBase escenaNueva;
     private EscenaBase escenaJuego;
+    private EscenaBase escenaSettings;
 
     // El tipo de escena que se está mostrando
     private TipoEscena tipoEscenaActual = TipoEscena.ESCENA_SPLASH;
@@ -78,6 +79,9 @@ public class AdministradorEscenas
                 break;
             case ESCENA_JUEGO:
                 setEscenaBase(escenaJuego);
+                break;
+            case ESCENA_SETTINGS:
+                setEscenaBase(escenaSettings);
                 break;
         }
     }
@@ -145,19 +149,19 @@ public class AdministradorEscenas
         escenaJuego.liberarEscena();
         escenaJuego = null;
     }
-/*
+
     //*** Crea la escena de Juego Dos
-    public void crearEscenaJuegoDos() {
+    public void crearEscenaSettings() {
         // Carga los recursos
-        admRecursos.cargarRecursosJuegoDos();
-        //escenaJuegoDos = new EscenaJuegoDos();
+       // admRecursos.cargarRecursosJuegoDos();
+        escenaSettings = new EscenaHistoria();
     }
 
     //*** Libera la escena de Juego Dos
-    public void liberarEscenaJuegoDos() {
-        admRecursos.liberarRecursosJuegoDos();
-        escenaJuegoDos.liberarEscena();
-        escenaJuegoDos = null;
+    public void liberarEscenaSettings() {
+        //admRecursos.liberarRecursosJuegoDos();
+        escenaSettings.liberarEscena();
+        escenaSettings = null;
     }
-*/
+
 }

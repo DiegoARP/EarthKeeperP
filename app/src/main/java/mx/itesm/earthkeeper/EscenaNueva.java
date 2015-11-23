@@ -17,7 +17,7 @@ public class EscenaNueva extends EscenaBase{
 
     @Override
     public void cargarRecursos() {
-        regionFondo = cargarImagen("b-neet1.jpg");
+        regionFondo = cargarImagen("EARTHKEEPER-MASTER/Pantalla Creditos/Pantalla-FINAL-Creditos.jpg");
     }
 
     @Override

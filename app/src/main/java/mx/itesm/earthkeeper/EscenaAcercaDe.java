@@ -15,7 +15,7 @@ public class EscenaAcercaDe extends EscenaBase
 
     @Override
     public void cargarRecursos() {
-        regionFondo = cargarImagen("Pantalla_Creditos.png");
+        regionFondo = cargarImagen("EARTHKEEPER-MASTER/Pantalla Creditos/Pantalla-FINAL-Creditos.jpg");
     }
 
     @Override

@@ -25,7 +25,7 @@ public class EscenaMenu extends EscenaBase
     private ITextureRegion regionBtnAcercaDe;
     private ITextureRegion regionBtnJugar;
     private ITextureRegion regionBtnNueva;
-    private ITextureRegion regionBtnHist;
+    private ITextureRegion regionBtnSettings;
 
 
     // Sprites sobre la escena
@@ -49,10 +49,10 @@ public class EscenaMenu extends EscenaBase
         // Fondo
         regionFondo = cargarImagen("Pantalla_Consola-FINAL.jpg");
         // Botones del menú
-        regionBtnAcercaDe = cargarImagen("Gallery_GO.png");
-        regionBtnNueva = cargarImagen("Settings_GO.png");
-        regionBtnJugar = cargarImagen("PlayAgain_GO.png");
-        // regionBtnHist = cargarImagen("btnJugar.png");
+        regionBtnAcercaDe = cargarImagen("EARTHKEEPER-MASTER/Pantalla Principal/Gallery_Boton.png");
+        regionBtnNueva = cargarImagen("EARTHKEEPER-MASTER/Pantalla Principal/Credits_Boton.png");
+        regionBtnJugar = cargarImagen("EARTHKEEPER-MASTER/Pantalla Principal/PLAY_Boton.png");
+        regionBtnSettings = cargarImagen("EARTHKEEPER-MASTER/Pantalla Principal/Settings_Boton.png");
     }
 
     @Override
@@ -90,8 +90,8 @@ public class EscenaMenu extends EscenaBase
                 regionBtnJugar, actividadJuego.getVertexBufferObjectManager()), 1.5f, 1);
         IMenuItem opcionNueva = new ScaleMenuItemDecorator(new SpriteMenuItem(OPCION_NUEVA,
                 regionBtnNueva, actividadJuego.getVertexBufferObjectManager()), 1.5f, 1);
-       // IMenuItem opcionHist = new ScaleMenuItemDecorator(new SpriteMenuItem(OPCION_H,
-               // regionBtnHist, actividadJuego.getVertexBufferObjectManager()), 1.5f, 1);
+        IMenuItem opcionHist = new ScaleMenuItemDecorator(new SpriteMenuItem(OPCION_H,
+                regionBtnSettings, actividadJuego.getVertexBufferObjectManager()), 1.5f, 1);
 
 
 
@@ -99,17 +99,17 @@ public class EscenaMenu extends EscenaBase
         menu.addMenuItem(opcionAcercaDe);
         menu.addMenuItem(opcionJugar);
         menu.addMenuItem(opcionNueva);
-        //menu.addMenuItem(opcionHist);
+        menu.addMenuItem(opcionHist);
 
         // Termina la configuración
         menu.buildAnimations();
         menu.setBackgroundEnabled(false);   // Completamente transparente
         // acercaDe = galeria
         // Ubicar las opciones DENTRO del menú. El centro del menú es (0,0)
-        opcionAcercaDe.setPosition(510, -50); //510,-60
+        opcionAcercaDe.setPosition(520, -30); //510,-60
         opcionJugar.setPosition(0,-320);
-        opcionNueva.setPosition(-430,-50);
-       // opcionHist.setPosition(0,-300);
+        opcionNueva.setPosition(-525,-30); //-440,-50
+        opcionHist.setPosition(45,320);
 
         // Registra el Listener para atender las opciones
         menu.setOnMenuItemClickListener(new MenuScene.IOnMenuItemClickListener() {
@@ -136,11 +136,11 @@ public class EscenaMenu extends EscenaBase
                         admEscenas.setEscena(TipoEscena.ESCENA_NUEVA);
                         admEscenas.liberarEscenaMenu();
                         break;
-                   // case OPCION_H:
-                     //   admEscenas.crearEscenaNueva();
-                       // admEscenas.setEscena(TipoEscena.ESCENA_HIST);
-                        //admEscenas.liberarEscenaMenu();
-                        //break;
+                    case OPCION_H:
+                        admEscenas.crearEscenaSettings();
+                        admEscenas.setEscena(TipoEscena.ESCENA_SETTINGS);
+                        admEscenas.liberarEscenaMenu();
+                        break;
 
                 }
                 return true;
