@@ -486,6 +486,7 @@ private void crearEnemigos() {
     protected void onManagedUpdate(float pSecondsElapsed)	{
 
         int vida=3;
+        int hola=0;
 
         Random ran = new Random();
 
