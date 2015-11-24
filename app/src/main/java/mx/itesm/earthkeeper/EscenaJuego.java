@@ -527,6 +527,7 @@ private void crearEnemigos() {
 
     @Override
     public void liberarRecursos() {
+        int cont=0;
         regionFondo.getTexture().unload();
         regionFin.getTexture().unload();
         Galaxias.getTexture().unload();
