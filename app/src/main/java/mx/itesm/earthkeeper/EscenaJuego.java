@@ -5,6 +5,7 @@ package mx.itesm.earthkeeper;
  */
 
 import android.graphics.Point;
+import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.widget.Toast;
@@ -81,6 +82,10 @@ public class EscenaJuego extends EscenaBase {
     //	Enemigos
     private ArrayList<Enemigos> listaEnemigos;
     private ArrayList<ITextureRegion> listaP;
+    private ArrayList<ITextureRegion> listaP1;
+    private ArrayList<ITextureRegion> listaP2;
+    private ArrayList<ITextureRegion> listaU;
+            ;
     private ITextureRegion regionVerde;
     private ITextureRegion regionRojo;
     private ITextureRegion regionAmarillo;
@@ -100,6 +105,7 @@ public class EscenaJuego extends EscenaBase {
 
     //Bosses
     private ITextureRegion regionBossAzul;
+    private Enemigos enemigoA;
 
     // Fin del juego
     private ITextureRegion regionFin;
@@ -297,8 +303,44 @@ private void crearEnemigos() {
 
     @Override
     public void crearEscena() {
-        listaEnemigos = new ArrayList<>(100);
+        listaEnemigos = new ArrayList<>();
+        int z=0;
+
+       // actualizarPuntos();
         listaP = new ArrayList<>();
+        listaP1 = new ArrayList<>();
+        listaP2 = new ArrayList<>();
+
+
+            listaP.add(regionAmarillo);
+            listaP.add(regionVerde);
+            listaP.add(regionAzul);
+            listaP.add(regionRojo);
+
+            listaP1.add(regionAmarillo);
+            listaP1.add(regionVerde);
+            listaP1.add(regionAzul);
+            listaP1.add(regionRojo);
+            listaP1.add(regionTAmarillo);
+            listaP1.add(regionTVerde);
+            listaP1.add(regionTAzul);
+            listaP1.add(regionTRojo);
+
+
+
+            listaP2.add(regionAmarillo);
+            listaP2.add(regionVerde);
+            listaP2.add(regionAzul);
+            listaP2.add(regionRojo);
+            listaP2.add(regionTAmarillo);
+            listaP2.add(regionTVerde);
+            listaP2.add(regionTAzul);
+            listaP2.add(regionTRojo);
+            listaP2.add(regionPAmarillo);
+            listaP2.add(regionPVerde);
+            listaP2.add(regionPAzul);
+            listaP2.add(regionPRojo);
+
 
         spriteGalaxias = cargarSprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2, Galaxias);
         spriteGalaxiaVerde = cargarSprite(0,0,GalaxiaVerde);
@@ -340,7 +382,7 @@ private void crearEnemigos() {
         attachChild(spriteVida2);
         attachChild(spriteVida3);
 
-        crearEnemigos();
+       // crearEnemigos();
         // Crear elementos de pausa
         agregarPausa();
         //Escudo
@@ -575,26 +617,26 @@ private void crearEnemigos() {
 
 
     @Override
-    protected void onManagedUpdate(float pSecondsElapsed)	{
+    protected void onManagedUpdate(float pSecondsElapsed) {
 
-        int vida=3;
-        int hola=0;
-        final int contA=0;
+        int vida = 3;
+        int hola = 0;
+        final int contA = 0;
 
         Random ran = new Random();
 
         agregarEscudo();
 
 
-
-
         //float posX = Tierra.getTextureX();
         //float posY = Tierra.getTextureY();
         super.onManagedUpdate(pSecondsElapsed);
         actualizarPuntos();
-        int cont=0;
-        int z=0;
-        if( puntos<100) {
+        int cont = 0;
+        int z;
+
+
+        /*if( puntos<100) {
 
             listaP.add(regionAmarillo);
             listaP.add(regionVerde);
@@ -612,34 +654,44 @@ private void crearEnemigos() {
             listaP.add(regionPAzul);
             listaP.add(regionPRojo);
         }
+*/
 
 
-        if (puntos==100 ) {
-            Sprite spriteBossAzul = new Sprite(0,
-                   100, regionBossAzul, actividadJuego.getVertexBufferObjectManager()) {
+        if (puntos == 100) {
+            if (enemigoA==null) {
+                Sprite spriteBossAzul = new Sprite(0,
+                        100, regionBossAzul, actividadJuego.getVertexBufferObjectManager()) {
 
-                @Override
-                public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
-                    this.setPosition(pSceneTouchEvent.getX() - this.getWidth() / 2, pSceneTouchEvent.getY() - this.getHeight() / 2);
-                    if (pSceneTouchEvent.isActionDown()) {
-                        contAzul++;
-                        //return true;
+                    @Override
+                    public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
+                        this.setPosition(pSceneTouchEvent.getX() - this.getWidth() / 2, pSceneTouchEvent.getY() - this.getHeight() / 2);
+                        if (pSceneTouchEvent.isActionDown()) {
+                            contAzul++;
+                            //return true;
+                        }
+
+
+                        return true; //super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
                     }
+                };
 
-
-                    return true; //super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
+                registerTouchArea(spriteBossAzul);
+                setTouchAreaBindingOnActionDownEnabled(true);
+                //attachChild(spriteBossAzul);
+                enemigoA = new Enemigos(spriteBossAzul);
+                attachChild(enemigoA.getSpriteEnemigo());
+            }
+            if ( enemigoA!=null) {
+                //Log.i("onManagedUpdate","Moviendo...");
+                enemigoA.mover(spriteTierra.getX(), spriteTierra.getY());
+                if (contAzul == 3) {
+                    puntos += 20;
+                    detachChild(enemigoA.getSpriteEnemigo());
+                    enemigoA = null;
                 }
-            };
-
-            registerTouchArea(spriteBossAzul);
-            setTouchAreaBindingOnActionDownEnabled(true);
-            attachChild(spriteBossAzul);
-            Enemigos enemigoA = new Enemigos(spriteBossAzul);
-            enemigoA.mover(spriteTierra.getX(), spriteTierra.getY());
-            if (contAzul == 3) {
-                detachChild(spriteBossAzul);
             }
         }
+
 
        // if (juegoCorriendo = true) {
 
@@ -651,13 +703,32 @@ private void crearEnemigos() {
                 }
                tiempoEnemigos = 0;
 
-                    z = ran.nextInt(listaP.size() - 0 + 1) + 0;
+
+                if (puntos<100){
+                    listaU = listaP;
+                    z = ran.nextInt(listaU.size()) + 0;
+                    Log.i("xx","usando lista1");
+                    Log.i("zzzz= ","z"+ z);
+                } else if(puntos>=200){
+                    listaU=listaP1;
+                    z = ran.nextInt(listaU.size()) + 0;
+                    Log.i("xx","usando lista2");
+                    Log.i("zzzz= ","z"+ z);
+                } else if (puntos>=300){
+                    listaU=listaP2;
+                    z = ran.nextInt(listaU.size()) + 0;
+                    Log.i("xx","usando lista3");
+                    Log.i("zzzz= ","z"+ z);
+                }
+
+                z = ran.nextInt(listaU.size()) + 0;
+
 
               //  int r1 = ran.nextInt(ControlJuego.ANCHO_CAMARA - 0 + 1) + 0;
-                float r1 = GalaxiaRojo.getWidth() + (regionAzul.getWidth()/2) + ran.nextFloat()*(ControlJuego.ALTO_CAMARA + 1) - ( GalaxiaRojo.getWidth() +  GalaxiaAmarillo.getWidth()+ regionAzul.getWidth()/2 );
-                float r2 = GalaxiaRojo.getWidth() + (regionAzul.getWidth()/2)+ ran.nextFloat()*(ControlJuego.ALTO_CAMARA + 1) - ( GalaxiaRojo.getWidth() +  GalaxiaAmarillo.getWidth()+ regionAzul.getWidth()/2 );
-                float r3 = GalaxiaRojo.getWidth() + (regionAzul.getWidth()/2)+ ran.nextFloat()*(ControlJuego.ANCHO_CAMARA + 1) - ( GalaxiaRojo.getWidth() +  GalaxiaAmarillo.getWidth() + regionAzul.getWidth()/2);
-                float r4 = GalaxiaRojo.getWidth() + (regionAzul.getWidth()/2) + ran.nextFloat()*(ControlJuego.ANCHO_CAMARA + 1) - ( GalaxiaRojo.getWidth() +  GalaxiaAmarillo.getWidth()+ regionAzul.getWidth()/2 );
+                float r1 = (float)Math.random()*440 + 180; //GalaxiaRojo.getWidth() + (regionAzul.getWidth()/2) + ran.nextFloat()*(ControlJuego.ALTO_CAMARA + 1) - ( GalaxiaRojo.getWidth() +  GalaxiaAmarillo.getWidth()+ regionAzul.getWidth()/2 );
+                float r2 = (float)Math.random()*440 + 180;//GalaxiaRojo.getWidth() + (regionAzul.getWidth()/2)+ ran.nextFloat()*(ControlJuego.ALTO_CAMARA + 1) - ( GalaxiaRojo.getWidth() +  GalaxiaAmarillo.getWidth()+ regionAzul.getWidth()/2 );
+                float r3 = (float)Math.random()*900 + 180;//GalaxiaRojo.getWidth() + (regionAzul.getWidth()/2)+ ran.nextFloat()*(ControlJuego.ANCHO_CAMARA + 1) - ( GalaxiaRojo.getWidth() +  GalaxiaAmarillo.getWidth() + regionAzul.getWidth()/2);
+                float r4 =(float)Math.random()*900 + 180;// GalaxiaRojo.getWidth() + (regionAzul.getWidth()/2) + ran.nextFloat()*(ControlJuego.ANCHO_CAMARA + 1) - ( GalaxiaRojo.getWidth() +  GalaxiaAmarillo.getWidth()+ regionAzul.getWidth()/2 );
                 //int r2 = ran.nextInt(ControlJuego.ANCHO_CAMARA - 0 + 1) + 0;
                 //int r3 = ran.nextInt(ControlJuego.ALTO_CAMARA - 0 + 1) + 0;
                 //int r4 = ran.nextInt(ControlJuego.ALTO_CAMARA - 0 + 1) + 0;
@@ -672,30 +743,34 @@ private void crearEnemigos() {
 
 
 
-                Sprite spriteEnemigo = new Sprite(ControlJuego.ANCHO_CAMARA + listaP.get(z).getWidth(),
-                        (float) (Math.random() * ControlJuego.ALTO_CAMARA - listaP.get(z).getHeight()) +
-                                       listaP.get(z).getHeight(), listaP.get(z), actividadJuego.getVertexBufferObjectManager()) {
+                        Sprite spriteEnemigo = new Sprite(ControlJuego.ANCHO_CAMARA + listaU.get(z).getWidth(),
+                                (float) (Math.random() * ControlJuego.ALTO_CAMARA - listaU.get(z).getHeight()) +
+                                        listaU.get(z).getHeight(), listaU.get(z), actividadJuego.getVertexBufferObjectManager()) {
 
-                    @Override
-                    public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
+                            @Override
+                            public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
 
-                        this.setPosition(pSceneTouchEvent.getX() - this.getWidth() / 2, pSceneTouchEvent.getY() - this.getHeight() / 2);
+                                this.setPosition(pSceneTouchEvent.getX() - this.getWidth() / 2, pSceneTouchEvent.getY() - this.getHeight() / 2);
 
-                        return true; //super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
-                    }
-                };
+                                return true; //super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
+                            }
+                        };
 
 
-                Enemigos nuevoEnemigo = new Enemigos(spriteEnemigo);
+                        Enemigos nuevoEnemigo = new Enemigos(spriteEnemigo);
 
-                registerTouchArea(nuevoEnemigo.getSpriteEnemigo());
-                setTouchAreaBindingOnActionDownEnabled(true);
-                attachChild(nuevoEnemigo.getSpriteEnemigo());
-                //nuevoEnemigo.mover(0,10);
-                listaEnemigos.add(nuevoEnemigo);    //	Lo	AGREGA	a	la	escena
+                        registerTouchArea(nuevoEnemigo.getSpriteEnemigo());
+                        setTouchAreaBindingOnActionDownEnabled(true);
+                        attachChild(nuevoEnemigo.getSpriteEnemigo());
+                        //nuevoEnemigo.mover(0,10);
+
+                    listaEnemigos.add(nuevoEnemigo);    //	Lo	AGREGA	a	la	escena
+
+
                 boolean mGrabbed = false;
 
-                if (puntos>100 ) {
+
+                /*if (puntos>100 ) {
                      Sprite spriteBossAzul = new Sprite(ControlJuego.ANCHO_CAMARA + listaP.get(z).getWidth(),
                             (float) (Math.random() * ControlJuego.ALTO_CAMARA - listaP.get(z).getHeight()) +
                                     listaP.get(z).getHeight(), regionBossAzul, actividadJuego.getVertexBufferObjectManager()) {
@@ -721,7 +796,7 @@ private void crearEnemigos() {
                     if (contAzul == 3) {
                         detachChild(spriteBossAzul);
                     }
-                }
+                }*/
                 //	Lo	AGREGA	a	la	lista
 
                 // Agrega al enemigo a posiciones aleatorias generadas
@@ -755,7 +830,7 @@ private void crearEnemigos() {
                         nuevoEnemigo.getSpriteEnemigo().setPosition(r3, 0);
                     }
 
-                } else if (puntos>200){
+                } /*else if (puntos>200){
                     if (var == 1) {
                         // nuevoEnemigo.getSpriteEnemigo().setPosition(ControlJuego.ANCHO_CAMARA, -300);
                         nuevoEnemigo.getSpriteEnemigo().setPosition(0, r1);
@@ -774,7 +849,7 @@ private void crearEnemigos() {
                         nuevoEnemigo.getSpriteEnemigo().setPosition(r3, 0);
                         nuevoEnemigo.getSpriteEnemigo().setPosition(ControlJuego.ANCHO_CAMARA, r2);
                     }
-                }
+                }*/
             }
 
        // if ( juegoCorriendo==true) {
