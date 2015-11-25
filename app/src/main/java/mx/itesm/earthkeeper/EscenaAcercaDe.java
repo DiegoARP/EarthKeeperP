@@ -126,6 +126,8 @@ public class EscenaAcercaDe extends EscenaBase
         attachChild(spriteLA);
         registerTouchArea(spriteLA);
 
+        int nada=0;
+
     }
 
     @Override
