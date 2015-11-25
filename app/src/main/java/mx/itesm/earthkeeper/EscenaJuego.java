@@ -1077,12 +1077,12 @@ private void crearEnemigos() {
                         detachChild(enemigo.getSpriteEnemigo());
                         listaEnemigos.remove(enemigo);
 
-                    } /*else if (spriteGalaxiaAzul.collidesWith(enemigo.getSpriteEnemigo()) || spriteGalaxiaRojo.collidesWith(enemigo.getSpriteEnemigo())
+                    } else if (spriteGalaxiaAzul.collidesWith(enemigo.getSpriteEnemigo()) || spriteGalaxiaRojo.collidesWith(enemigo.getSpriteEnemigo())
                     ||spriteGalaxiaAmarillo.collidesWith(enemigo.getSpriteEnemigo())){
                         puntos-=5;
                         detachChild(enemigo.getSpriteEnemigo());
                         listaEnemigos.remove(enemigo);
-                    }*/
+                    }
                 }
 
                 if (enemigo.getSpriteEnemigo().getTextureRegion() == regionAzul || enemigo.getSpriteEnemigo().getTextureRegion() == regionTAzul || enemigo.getSpriteEnemigo().getTextureRegion() == regionPAzul) {
@@ -1090,12 +1090,12 @@ private void crearEnemigos() {
                         puntos += 5;
                         detachChild(enemigo.getSpriteEnemigo());
                         listaEnemigos.remove(enemigo);
-                    } /*else if (enemigo.getSpriteEnemigo().collidesWith(spriteGalaxiaVerde) || enemigo.getSpriteEnemigo().collidesWith(spriteGalaxiaRojo)
+                    } else if (enemigo.getSpriteEnemigo().collidesWith(spriteGalaxiaVerde) || enemigo.getSpriteEnemigo().collidesWith(spriteGalaxiaRojo)
                             ||enemigo.getSpriteEnemigo().collidesWith(spriteGalaxiaAmarillo)){
                         puntos-=5;
                         detachChild(enemigo.getSpriteEnemigo());
                         listaEnemigos.remove(enemigo);
-                    }*/
+                    }
                 }
 
                 if (enemigo.getSpriteEnemigo().getTextureRegion() == regionAmarillo || enemigo.getSpriteEnemigo().getTextureRegion() == regionTAmarillo || enemigo.getSpriteEnemigo().getTextureRegion() == regionPAmarillo) {
@@ -1103,12 +1103,12 @@ private void crearEnemigos() {
                         puntos += 5;
                         detachChild(enemigo.getSpriteEnemigo());
                         listaEnemigos.remove(enemigo);
-                    } /*else if (enemigo.getSpriteEnemigo().collidesWith(spriteGalaxiaAzul) || enemigo.getSpriteEnemigo().collidesWith(spriteGalaxiaRojo)
+                    } else if (enemigo.getSpriteEnemigo().collidesWith(spriteGalaxiaAzul) || enemigo.getSpriteEnemigo().collidesWith(spriteGalaxiaRojo)
                             ||enemigo.getSpriteEnemigo().collidesWith(spriteGalaxiaVerde)){
                         puntos-=5;
                         detachChild(enemigo.getSpriteEnemigo());
                         listaEnemigos.remove(enemigo);
-                    }*/
+                    }
                 }
 
                 if (enemigo.getSpriteEnemigo().getTextureRegion() == regionRojo || enemigo.getSpriteEnemigo().getTextureRegion() == regionTRojo || enemigo.getSpriteEnemigo().getTextureRegion() == regionPRojo) {
@@ -1116,12 +1116,12 @@ private void crearEnemigos() {
                         puntos += 5;
                         detachChild(enemigo.getSpriteEnemigo());
                         listaEnemigos.remove(enemigo);
-                    } /*else if (enemigo.getSpriteEnemigo().collidesWith(spriteGalaxiaAzul) || enemigo.getSpriteEnemigo().collidesWith(spriteGalaxiaVerde)
+                    } else if (enemigo.getSpriteEnemigo().collidesWith(spriteGalaxiaAzul) || enemigo.getSpriteEnemigo().collidesWith(spriteGalaxiaVerde)
                             ||enemigo.getSpriteEnemigo().collidesWith(spriteGalaxiaAmarillo)){
                         puntos-=5;
                         detachChild(enemigo.getSpriteEnemigo());
                         listaEnemigos.remove(enemigo);
-                    }*/
+                    }
                 }
 
 

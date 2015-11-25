@@ -22,21 +22,27 @@ public class EscenaHistoria extends EscenaBase {
     private ITextureRegion btnSOS;
     private Sprite SOS;
     private ITextureRegion regionSOS;
-
+    private ITextureRegion btnHow;
+    private Sprite HowTo;
+    private ITextureRegion regionHow;
 
     @Override
     public void cargarRecursos() {
         regionFondo = cargarImagen("EARTHKEEPER-MASTER/Pantalla Galeria/Pantalla_ConsolaVACIA.jpg");
 
         btnSOS = cargarImagen ("EARTHKEEPER-MASTER/Pantalla Settings/SOS-Boton.png");
-        regionSOS = cargarImagen("EARTHKEEPER-MASTER/Pantalla Settings/Sprite_Howtoplay.png");
+        btnHow = cargarImagen("EARTHKEEPER-MASTER/Pantalla Settings/HowToPlay-Boton.png");
+        regionSOS = cargarImagen("EARTHKEEPER-MASTER/Pantalla Settings/sprite SOS.png");
+        regionHow = cargarImagen("EARTHKEEPER-MASTER/Pantalla Settings/Sprite_Howtoplay.png");
+
     }
 
     @Override
     public void crearEscena() {
         spriteFondo = cargarSprite(ControlJuego.ANCHO_CAMARA/2, ControlJuego.ALTO_CAMARA/2, regionFondo);
         attachChild(spriteFondo);
-        SOS = cargarSprite((ControlJuego.ANCHO_CAMARA/2)-400, ControlJuego.ALTO_CAMARA/2, regionSOS);
+        SOS = cargarSprite((ControlJuego.ANCHO_CAMARA/2)-475, ControlJuego.ALTO_CAMARA/2, regionSOS);
+        HowTo = cargarSprite(200,-230, regionHow);
 
 
         Sprite spriteSOS = new Sprite(ControlJuego.ANCHO_CAMARA/2,
@@ -65,6 +71,30 @@ public class EscenaHistoria extends EscenaBase {
         setTouchAreaBindingOnActionDownEnabled(true);
         registerTouchArea(spriteSOS);
 
+        Sprite spriteHowTo = new Sprite((ControlJuego.ANCHO_CAMARA /2)+45,(ControlJuego.ALTO_CAMARA/2)+320, btnHow, actividadJuego.getVertexBufferObjectManager()) {
+
+            @Override
+            public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
+
+                if (pSceneTouchEvent.isActionDown()) {
+
+                    /*
+                    detachChild(spriteL);
+
+                    attachChild(spriteB);
+                    return true;*/
+                    attachChild(HowTo);
+                } else  if (pSceneTouchEvent.isActionUp()) {
+                    detachChild(HowTo);
+                }
+
+
+                return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
+            }
+        };
+        attachChild(spriteHowTo);
+        setTouchAreaBindingOnActionDownEnabled(true);
+        registerTouchArea(spriteHowTo);
 
 
 

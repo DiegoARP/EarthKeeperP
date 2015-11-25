@@ -64,7 +64,7 @@ public class EscenaAcercaDe extends EscenaBase
         spriteB.animate(200);
 
         spriteBnnet = cargarSprite((ControlJuego.ANCHO_CAMARA/2)-500, ControlJuego.ALTO_CAMARA/2, Bnnet);
-        spriteLumaka = cargarSprite((ControlJuego.ANCHO_CAMARA/2)-500, ControlJuego.ALTO_CAMARA/2,Lumaka);
+        spriteLumaka = cargarSprite(200, -230,Lumaka);
 
 
         //Botones
@@ -81,8 +81,10 @@ public class EscenaAcercaDe extends EscenaBase
 
                     attachChild(spriteB);
                     return true;*/
-                    attachChild(spriteBnnet);
+                    attachChild(spriteB);
                     //Log.i("xx", "1_attach spriteBnnet");
+                } else if (pSceneTouchEvent.isActionUp()){
+                    detachChild(spriteB);
                 }
 
 
