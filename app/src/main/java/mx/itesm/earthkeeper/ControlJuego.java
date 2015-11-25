@@ -1,6 +1,9 @@
 package mx.itesm.earthkeeper;
 
 import android.view.KeyEvent;
+
+import org.andengine.audio.music.Music;
+import org.andengine.audio.music.MusicFactory;
 import org.andengine.engine.camera.Camera;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
@@ -29,6 +32,8 @@ public class ControlJuego extends SimpleBaseGameActivity
     protected Camera camara;
     // El administrador de escenas (se encarga de cambiar las escenas)
     private AdministradorEscenas admEscenas;
+    // MUSICA DE FONDO, los efectos de sonido se cargan en cada escena
+    private Music musica;
 
     /*
     Se crea la configuración del Engine.
@@ -39,8 +44,13 @@ public class ControlJuego extends SimpleBaseGameActivity
     @Override
     public EngineOptions onCreateEngineOptions() {
         camara = new Camera(0,0,ANCHO_CAMARA,ALTO_CAMARA);
-        return new EngineOptions(true, ScreenOrientation.LANDSCAPE_FIXED,
+        //return new EngineOptions(true, ScreenOrientation.LANDSCAPE_FIXED,
+               // new FillResolutionPolicy(), camara);
+        EngineOptions opciones = new EngineOptions(true, ScreenOrientation.LANDSCAPE_FIXED,
                 new FillResolutionPolicy(), camara);
+        opciones.getAudioOptions().setNeedsSound(true);
+        opciones.getAudioOptions().setNeedsMusic(true);
+        return  opciones;
     }
 
     // Crea los recursos del juego.
@@ -51,6 +61,55 @@ public class ControlJuego extends SimpleBaseGameActivity
         // Obtenemos la referencia al objeto administrador
         admEscenas = AdministradorEscenas.getInstance();
     }
+
+    // Reproducir música de fondo
+    public void reproducirMusica(String archivo, boolean loop) {
+        if (musica!=null) {
+            musica.stop();
+            musica.release();
+            musica = null;
+        }
+        // Carga el archivo mp3
+        try {
+            musica = MusicFactory.createMusicFromAsset(getMusicManager(),
+                    this, archivo);
+            musica.setLooping(loop);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+        musica.play();
+    }
+
+    public void detenerMusica() {
+        if (musica!=null) {
+            musica.stop();
+            musica.release();
+            musica = null;
+        }
+    }
+
+
+    // Ciclo de vida del juego
+    @Override
+    public synchronized void onResumeGame() {
+        if(musica != null && !musica.isPlaying()){
+            musica.play();
+        }
+        super.onResumeGame();
+    }
+
+    @Override
+    public synchronized void onPauseGame() {
+        if(musica != null && musica.isPlaying()){
+            musica.pause();
+        }
+        super.onPauseGame();
+    }
+
+
+
+
 
     // Regresa la escena inicial.
     @Override

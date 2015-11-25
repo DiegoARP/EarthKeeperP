@@ -10,6 +10,7 @@ import android.view.Display;
 import android.view.MotionEvent;
 import android.widget.Toast;
 
+import org.andengine.audio.sound.Sound;
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.Camera;
 import org.andengine.engine.handler.IDrawHandler;
@@ -33,7 +34,8 @@ import org.andengine.opengl.texture.ITexture;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.TiledTextureRegion;
 import org.andengine.util.IDisposable;
-
+import org.andengine.audio.music.Music;
+import org.andengine.audio.music.MusicFactory;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -66,10 +68,14 @@ public class EscenaJuego extends EscenaBase {
     private Sprite spriteVida1;
     private Sprite spriteVida2;
     private Sprite spriteVida3;
+    private int yolo=0;
     //VIDA
     private int ANCHO_VIDA;
     private int vida;
     private int contAzul=0;
+    private int contVerde=0;
+    private int contAmarillo=0;
+    private int contRojo=0;
     private Rectangle rectVida;
     private Rectangle rectVidaActual;
 
@@ -105,7 +111,15 @@ public class EscenaJuego extends EscenaBase {
 
     //Bosses
     private ITextureRegion regionBossAzul;
+    private ITextureRegion regionBossVerde;
+    private ITextureRegion regionBossAmarillo;
+    private ITextureRegion regionBossRojo;
     private Enemigos enemigoA;
+    private Enemigos enemigoAm;
+    private Enemigos enemigoV;
+    private Enemigos enemigoR;
+
+
 
     // Fin del juego
     private ITextureRegion regionFin;
@@ -134,7 +148,11 @@ public class EscenaJuego extends EscenaBase {
     private ITextureRegion regionEscudoActivado;
     private Sprite spriteEscudoActivado;
     private Sprite spriteEscudo;
+    private Sprite escudo;
 
+    //Efectos de sonido
+    private Sound sonidoTierra;
+    private Sound sonidoGameOver;
 
 
 
@@ -175,6 +193,9 @@ public class EscenaJuego extends EscenaBase {
         regionPRojo = cargarImagen("Naves/Redondo_Rojo.png");
         //Bosses
         regionBossAzul = cargarImagen("EARTHKEEPER-MASTER/Pantalla Juego/Bosses/Sb-neet.png");
+        regionBossVerde = cargarImagen("EARTHKEEPER-MASTER/Pantalla Juego/Bosses/Slumaka.png");
+        regionBossAmarillo = cargarImagen("EARTHKEEPER-MASTER/Pantalla Juego/Bosses/Sthee.png");
+        regionBossRojo = cargarImagen("EARTHKEEPER-MASTER/Pantalla Juego/Bosses/Sklaam.png");
 
 
         fontMonster = cargarFont("OCR.ttf", 32, 0xFFFFFFFF, "Puntos: 0123456789");
@@ -191,7 +212,10 @@ public class EscenaJuego extends EscenaBase {
         regionEscudo4 = cargarImagen("EARTHKEEPER-MASTER/Pantalla Juego/escudo nuevo/barra escudo 4.png");
         regionEscudo5 = cargarImagen("EARTHKEEPER-MASTER/Pantalla Juego/escudo nuevo/barra escudo 5.png");
         regionEscudo6 = cargarImagen("EARTHKEEPER-MASTER/Pantalla Juego/escudo nuevo/barra escudo 6.png");
-        regionEscudoActivado = cargarImagen("EARTHKEEPER-MASTER/Pantalla Juego/escudo solo.png");
+        regionEscudoActivado = cargarImagen("EARTHKEEPER-MASTER/Pantalla Juego/EscudoTierra.png");
+        //Sonidos
+        sonidoTierra = cargarEfecto("EARTHKEEPER-MASTER/Sonidos/Grito.wav");
+        sonidoGameOver = cargarEfecto("EARTHKEEPER-MASTER/Sonidos/GameOver.wav");
 
 
     }
@@ -390,12 +414,13 @@ private void crearEnemigos() {
         //registerTouchArea(spriteTierra);
         setTouchAreaBindingOnActionDownEnabled(true);
         agregarTextoPuntos();
-
+        actividadJuego.reproducirMusica("EARTHKEEPER-MASTER/Sonidos/Fondo.wav",true);
     }
 
     @Override
     public void onBackKeyPressed() {
         // Regresar al menú principal
+        actividadJuego.detenerMusica();
         admEscenas.crearEscenaMenu();
         admEscenas.setEscena(TipoEscena.ESCENA_MENU);
         admEscenas.liberarEscenaJuego();
@@ -413,43 +438,63 @@ private void crearEnemigos() {
     }
 
     private void agregarEscudo(){
+
+        escudo = new Sprite(spriteTierra.getX()-500, spriteTierra.getY()-100,
+                regionEscudoActivado, actividadJuego.getVertexBufferObjectManager());
         //spriteEscudo =cargarSprite(regionBtnPausa.getWidth()/2+600, ControlJuego.ALTO_CAMARA - regionBtnPausa.getHeight()/2-640,regionEscudo);
        // final Sprite Escudo = new Sprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2,
               //  regionEscudoActivado, actividadJuego.getVertexBufferObjectManager());
         Sprite btnEscudo = new Sprite(regionBtnPausa.getWidth()/2+600, ControlJuego.ALTO_CAMARA - regionBtnPausa.getHeight()/2-640,
                 regionEscudo, actividadJuego.getVertexBufferObjectManager());
-        attachChild(btnEscudo);
-        if (puntos==20){
-            Sprite btnEscudo1 = new Sprite(regionBtnPausa.getWidth()/2+600, ControlJuego.ALTO_CAMARA - regionBtnPausa.getHeight()/2-640,
-                    regionEscudo1, actividadJuego.getVertexBufferObjectManager());
-            attachChild(btnEscudo1);
-        } else if (puntos==40){
+        Sprite btnEscudo1 = new Sprite(regionBtnPausa.getWidth()/2+600, ControlJuego.ALTO_CAMARA - regionBtnPausa.getHeight()/2-640,
+                regionEscudo1, actividadJuego.getVertexBufferObjectManager());
+        Sprite btnEscudo2 = new Sprite(regionBtnPausa.getWidth()/2+600, ControlJuego.ALTO_CAMARA - regionBtnPausa.getHeight()/2-640,
+                regionEscudo2, actividadJuego.getVertexBufferObjectManager());
+        Sprite btnEscudo3 = new Sprite(regionBtnPausa.getWidth()/2+600, ControlJuego.ALTO_CAMARA - regionBtnPausa.getHeight()/2-640,
+                regionEscudo3, actividadJuego.getVertexBufferObjectManager());
+        Sprite btnEscudo4 = new Sprite(regionBtnPausa.getWidth()/2+600, ControlJuego.ALTO_CAMARA - regionBtnPausa.getHeight()/2-640,
+                regionEscudo4, actividadJuego.getVertexBufferObjectManager());
+        Sprite btnEscudo5 = new Sprite(regionBtnPausa.getWidth()/2+600, ControlJuego.ALTO_CAMARA - regionBtnPausa.getHeight()/2-640,
+                regionEscudo5, actividadJuego.getVertexBufferObjectManager());
 
-            Sprite btnEscudo2 = new Sprite(regionBtnPausa.getWidth()/2+600, ControlJuego.ALTO_CAMARA - regionBtnPausa.getHeight()/2-640,
-                    regionEscudo2, actividadJuego.getVertexBufferObjectManager());
+        attachChild(btnEscudo);
+        if (puntos==20 || puntos==220 || puntos==420){
+            //Sprite btnEscudo1 = new Sprite(regionBtnPausa.getWidth()/2+600, ControlJuego.ALTO_CAMARA - regionBtnPausa.getHeight()/2-640,
+                   // regionEscudo1, actividadJuego.getVertexBufferObjectManager());
+            detachChild(btnEscudo);
+            attachChild(btnEscudo1);
+        } else if (puntos==40 || puntos==240 || puntos==440){
+
+            //Sprite btnEscudo2 = new Sprite(regionBtnPausa.getWidth()/2+600, ControlJuego.ALTO_CAMARA - regionBtnPausa.getHeight()/2-640,
+                    //regionEscudo2, actividadJuego.getVertexBufferObjectManager());
+            detachChild(btnEscudo1);
             attachChild(btnEscudo2);
-        } else if (puntos==60){
-            Sprite btnEscudo3 = new Sprite(regionBtnPausa.getWidth()/2+600, ControlJuego.ALTO_CAMARA - regionBtnPausa.getHeight()/2-640,
-                    regionEscudo3, actividadJuego.getVertexBufferObjectManager());
+        } else if (puntos==60 || puntos==260 || puntos==460){
+            //Sprite btnEscudo3 = new Sprite(regionBtnPausa.getWidth()/2+600, ControlJuego.ALTO_CAMARA - regionBtnPausa.getHeight()/2-640,
+                //    regionEscudo3, actividadJuego.getVertexBufferObjectManager());
+            detachChild(btnEscudo2);
             attachChild(btnEscudo3);
-        } else if (puntos==80){
-            Sprite btnEscudo4 = new Sprite(regionBtnPausa.getWidth()/2+600, ControlJuego.ALTO_CAMARA - regionBtnPausa.getHeight()/2-640,
-                    regionEscudo4, actividadJuego.getVertexBufferObjectManager());
+        } else if (puntos==80 || puntos==280 || puntos==480){
+            //Sprite btnEscudo4 = new Sprite(regionBtnPausa.getWidth()/2+600, ControlJuego.ALTO_CAMARA - regionBtnPausa.getHeight()/2-640,
+              //      regionEscudo4, actividadJuego.getVertexBufferObjectManager());
+            detachChild(btnEscudo3);
             attachChild(btnEscudo4);
-        } else if (puntos==100){
-            Sprite btnEscudo5 = new Sprite(regionBtnPausa.getWidth()/2+600, ControlJuego.ALTO_CAMARA - regionBtnPausa.getHeight()/2-640,
-                    regionEscudo5, actividadJuego.getVertexBufferObjectManager());
+        } else if (puntos==100 || puntos==300 || puntos==500 ){
+            //Sprite btnEscudo5 = new Sprite(regionBtnPausa.getWidth()/2+600, ControlJuego.ALTO_CAMARA - regionBtnPausa.getHeight()/2-640,
+              //      regionEscudo5, actividadJuego.getVertexBufferObjectManager());
+            detachChild(btnEscudo4);
             attachChild(btnEscudo5);
-        } else if (puntos==120){
-            Sprite btnEscudo6 = new Sprite(regionBtnPausa.getWidth()/2+600, ControlJuego.ALTO_CAMARA - regionBtnPausa.getHeight()/2-640,
+        } else if (puntos>=120  ){
+            final Sprite btnEscudo6 = new Sprite(regionBtnPausa.getWidth()/2+600, ControlJuego.ALTO_CAMARA - regionBtnPausa.getHeight()/2-640,
                     regionEscudo6, actividadJuego.getVertexBufferObjectManager()){
                 @Override
                 public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
 
                     if (pSceneTouchEvent.isActionDown()) {
-                        Sprite Escudo = new Sprite(spriteTierra.getX()-500, spriteTierra.getY()-100,
-                                regionEscudoActivado, actividadJuego.getVertexBufferObjectManager());
-                        attachChild(Escudo);
+                        //escudo = new Sprite(spriteTierra.getX()-500, spriteTierra.getY()-100,
+                              //  regionEscudoActivado, actividadJuego.getVertexBufferObjectManager());
+                        attachChild(escudo);
+                        yolo++;
 
                         return true;
                     }
@@ -458,11 +503,19 @@ private void crearEnemigos() {
                 }
 
             };
+
             attachChild(btnEscudo6);
+            if(yolo==1){
+                detachChild(btnEscudo6);
+            }
             registerTouchArea(btnEscudo6);
+
         }
 
-
+        if(yolo==1){
+           detachChild(btnEscudo);
+            attachChild(btnEscudo);
+        }
 
         /*
         Sprite btnEscudo = new Sprite(regionBtnPausa.getWidth()/2+600, ControlJuego.ALTO_CAMARA - regionBtnPausa.getHeight()/2-640,
@@ -612,7 +665,9 @@ private void crearEnemigos() {
         regionFin=null;
     }
 
-
+    private void sonidoGrito(){
+        sonidoTierra.play();
+    }
 
 
 
@@ -620,7 +675,7 @@ private void crearEnemigos() {
     protected void onManagedUpdate(float pSecondsElapsed) {
 
         int vida = 3;
-        int hola = 0;
+
         final int contA = 0;
 
         Random ran = new Random();
@@ -634,6 +689,7 @@ private void crearEnemigos() {
         actualizarPuntos();
         int cont = 0;
         int z;
+        int contEscudo=0;
 
 
         /*if( puntos<100) {
@@ -657,7 +713,8 @@ private void crearEnemigos() {
 */
 
 
-        if (puntos == 100) {
+        if (puntos == 100 ||  puntos == 105 || puntos == 110 || puntos==115 || puntos == 500 || puntos == 505 || puntos == 510 || puntos == 515 ||
+                puntos==900 || puntos == 905 || puntos == 910) {
             if (enemigoA==null) {
                 Sprite spriteBossAzul = new Sprite(0,
                         100, regionBossAzul, actividadJuego.getVertexBufferObjectManager()) {
@@ -684,12 +741,148 @@ private void crearEnemigos() {
             if ( enemigoA!=null) {
                 //Log.i("onManagedUpdate","Moviendo...");
                 enemigoA.mover(spriteTierra.getX(), spriteTierra.getY());
+                if (enemigoA.getSpriteEnemigo().collidesWith(spriteTierra)){
+                    vida-=2;
+                    detachChild(enemigoA.getSpriteEnemigo());
+                }
                 if (contAzul == 3) {
+                    contAzul=0;
                     puntos += 20;
                     detachChild(enemigoA.getSpriteEnemigo());
                     enemigoA = null;
                 }
             }
+        } else if (puntos==200 || puntos==205 || puntos==210 || puntos==215 || puntos==600 || puntos==605 || puntos==610 || puntos==615 ||
+                puntos==1000 || puntos==1005 || puntos==1010 ){
+            if (enemigoV==null) {
+                Sprite spriteBossVerde = new Sprite(0,
+                        100, regionBossVerde, actividadJuego.getVertexBufferObjectManager()) {
+
+                    @Override
+                    public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
+                        this.setPosition(pSceneTouchEvent.getX() - this.getWidth() / 2, pSceneTouchEvent.getY() - this.getHeight() / 2);
+                        if (pSceneTouchEvent.isActionDown()) {
+                            contVerde++;
+                            //return true;
+                        }
+
+
+                        return true; //super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
+                    }
+                };
+
+                registerTouchArea(spriteBossVerde);
+                setTouchAreaBindingOnActionDownEnabled(true);
+                //attachChild(spriteBossAzul);
+                enemigoV = new Enemigos(spriteBossVerde);
+                attachChild(enemigoV.getSpriteEnemigo());
+            }
+            if ( enemigoV!=null) {
+                //Log.i("onManagedUpdate","Moviendo...");
+                enemigoV.mover(spriteTierra.getX(), spriteTierra.getY());
+                if(enemigoV.getSpriteEnemigo().collidesWith(spriteTierra)){
+                    vida-=2;
+                    detachChild(enemigoV.getSpriteEnemigo());
+                }
+                if (contVerde == 3) {
+                    contVerde=0;
+                    puntos += 20;
+                    detachChild(enemigoV.getSpriteEnemigo());
+                    enemigoV = null;
+                }
+            }
+
+        } else if (puntos==300 || puntos==305 || puntos==310 || puntos==700 || puntos==705 || puntos==710 || puntos==1100 || puntos==1105 ||
+                puntos==110){
+            if (enemigoAm==null) {
+                Sprite spriteBossAmarillo = new Sprite(0,
+                        100, regionBossAmarillo, actividadJuego.getVertexBufferObjectManager()) {
+
+                    @Override
+                    public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
+                        this.setPosition(pSceneTouchEvent.getX() - this.getWidth() / 2, pSceneTouchEvent.getY() - this.getHeight() / 2);
+                        if (pSceneTouchEvent.isActionDown()) {
+                            contAmarillo++;
+                            //return true;
+                        }
+
+
+                        return true; //super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
+                    }
+                };
+
+                registerTouchArea(spriteBossAmarillo);
+                setTouchAreaBindingOnActionDownEnabled(true);
+                //attachChild(spriteBossAzul);
+                enemigoAm = new Enemigos(spriteBossAmarillo);
+                attachChild(enemigoAm.getSpriteEnemigo());
+            }
+            if ( enemigoAm!=null) {
+                //Log.i("onManagedUpdate","Moviendo...");
+                enemigoAm.mover(spriteTierra.getX(), spriteTierra.getY());
+                if (enemigoAm.getSpriteEnemigo().collidesWith(spriteTierra)){
+                    vida-=2;
+                    detachChild(enemigoAm.getSpriteEnemigo());
+                }
+                if (contAmarillo == 3) {
+                    contAmarillo=0;
+                    puntos += 20;
+                    detachChild(enemigoAm.getSpriteEnemigo());
+                    enemigoAm = null;
+                }
+            }
+
+
+
+
+        } else if(puntos==400 ||puntos==405||puntos==410||puntos==800||puntos==805||puntos==810||puntos==1200||puntos==1205||puntos==1210){
+
+            if (enemigoR==null) {
+                Sprite spriteBossRojo = new Sprite(0,
+                        100, regionBossRojo, actividadJuego.getVertexBufferObjectManager()) {
+
+                    @Override
+                    public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
+                        this.setPosition(pSceneTouchEvent.getX() - this.getWidth() / 2, pSceneTouchEvent.getY() - this.getHeight() / 2);
+                        if (pSceneTouchEvent.isActionDown()) {
+                            contRojo++;
+                            //return true;
+                        }
+
+
+                        return true; //super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
+                    }
+                };
+
+                registerTouchArea(spriteBossRojo);
+                setTouchAreaBindingOnActionDownEnabled(true);
+                //attachChild(spriteBossAzul);
+                enemigoR= new Enemigos(spriteBossRojo);
+                attachChild(enemigoR.getSpriteEnemigo());
+            }
+            if ( enemigoR!=null) {
+                //Log.i("onManagedUpdate","Moviendo...");
+                enemigoR.mover(spriteTierra.getX(), spriteTierra.getY());
+                if(enemigoR.getSpriteEnemigo().collidesWith(spriteTierra)){
+                    vida-=2;
+                    detachChild(enemigoR.getSpriteEnemigo());
+                }
+                if (contRojo == 3) {
+                    contRojo=0;
+                    puntos += 20;
+                    detachChild(enemigoR.getSpriteEnemigo());
+                    enemigoR = null;
+                }
+            }
+
+
+
+
+
+
+
+
+
         }
 
 
@@ -703,18 +896,19 @@ private void crearEnemigos() {
                 }
                tiempoEnemigos = 0;
 
-
+                Log.i("xx","puntos = "+puntos);
                 if (puntos<100){
                     listaU = listaP;
                     z = ran.nextInt(listaU.size()) + 0;
                     Log.i("xx","usando lista1");
                     Log.i("zzzz= ","z"+ z);
-                } else if(puntos>=200){
+                    Log.i("xx","puntos: "+puntos);
+                } else if(puntos>=100 && puntos<200){
                     listaU=listaP1;
                     z = ran.nextInt(listaU.size()) + 0;
                     Log.i("xx","usando lista2");
                     Log.i("zzzz= ","z"+ z);
-                } else if (puntos>=300){
+                } else if (puntos>=200){
                     listaU=listaP2;
                     z = ran.nextInt(listaU.size()) + 0;
                     Log.i("xx","usando lista3");
@@ -763,6 +957,16 @@ private void crearEnemigos() {
                         setTouchAreaBindingOnActionDownEnabled(true);
                         attachChild(nuevoEnemigo.getSpriteEnemigo());
                         //nuevoEnemigo.mover(0,10);
+
+                        //Colisiones con escudo
+                        if(nuevoEnemigo.getSpriteEnemigo().collidesWith(escudo)){
+                            Log.i("xx","Colision Escudo");
+                           contEscudo++;
+                            detachChild(nuevoEnemigo.getSpriteEnemigo());
+                            if(contEscudo==3){
+                                detachChild(escudo);
+                            }
+                        }
 
                     listaEnemigos.add(nuevoEnemigo);    //	Lo	AGREGA	a	la	escena
 
@@ -867,7 +1071,7 @@ private void crearEnemigos() {
                 }
                 //	Revisa	el	choque	del	personaje	con	el	enemigo
 
-                if (enemigo.getSpriteEnemigo().getTextureRegion() == regionVerde || enemigo.getSpriteEnemigo().getTextureRegion() == regionTVerde  ) {
+                if (enemigo.getSpriteEnemigo().getTextureRegion() == regionVerde || enemigo.getSpriteEnemigo().getTextureRegion() == regionTVerde || enemigo.getSpriteEnemigo().getTextureRegion() == regionPVerde  ) {
                     if (spriteGalaxiaVerde.collidesWith(enemigo.getSpriteEnemigo())) {
                         puntos += 5;
                         detachChild(enemigo.getSpriteEnemigo());
@@ -881,7 +1085,7 @@ private void crearEnemigos() {
                     }*/
                 }
 
-                if (enemigo.getSpriteEnemigo().getTextureRegion() == regionAzul || enemigo.getSpriteEnemigo().getTextureRegion() == regionTAzul) {
+                if (enemigo.getSpriteEnemigo().getTextureRegion() == regionAzul || enemigo.getSpriteEnemigo().getTextureRegion() == regionTAzul || enemigo.getSpriteEnemigo().getTextureRegion() == regionPAzul) {
                     if (spriteGalaxiaAzul.collidesWith(enemigo.getSpriteEnemigo())) {
                         puntos += 5;
                         detachChild(enemigo.getSpriteEnemigo());
@@ -894,7 +1098,7 @@ private void crearEnemigos() {
                     }*/
                 }
 
-                if (enemigo.getSpriteEnemigo().getTextureRegion() == regionAmarillo || enemigo.getSpriteEnemigo().getTextureRegion() == regionTAmarillo) {
+                if (enemigo.getSpriteEnemigo().getTextureRegion() == regionAmarillo || enemigo.getSpriteEnemigo().getTextureRegion() == regionTAmarillo || enemigo.getSpriteEnemigo().getTextureRegion() == regionPAmarillo) {
                     if (spriteGalaxiaAmarillo.collidesWith(enemigo.getSpriteEnemigo())) {
                         puntos += 5;
                         detachChild(enemigo.getSpriteEnemigo());
@@ -907,7 +1111,7 @@ private void crearEnemigos() {
                     }*/
                 }
 
-                if (enemigo.getSpriteEnemigo().getTextureRegion() == regionRojo || enemigo.getSpriteEnemigo().getTextureRegion() == regionTRojo) {
+                if (enemigo.getSpriteEnemigo().getTextureRegion() == regionRojo || enemigo.getSpriteEnemigo().getTextureRegion() == regionTRojo || enemigo.getSpriteEnemigo().getTextureRegion() == regionPRojo) {
                     if (spriteGalaxiaRojo.collidesWith(enemigo.getSpriteEnemigo())) {
                         puntos += 5;
                         detachChild(enemigo.getSpriteEnemigo());
@@ -922,9 +1126,12 @@ private void crearEnemigos() {
 
 
                 if (spriteTierra.collidesWith(enemigo.getSpriteEnemigo())) {
+                    //sonidoGrito();
+
+
                     detachChild(enemigo.getSpriteEnemigo());
                     //listaEnemigos.remove(enemigo);
-                    vida++;
+                    vida--;
                     if (vida == 2) {
                         detachChild(spriteVida3);
                     } else if (vida == 1) {
@@ -932,6 +1139,8 @@ private void crearEnemigos() {
                     } else if (vida == 0) {
                         detachChild(spriteVida1);
                         juegoCorriendo = false;
+                        //sonidoGameOver.play();
+                        actividadJuego.reproducirMusica("EARTHKEEPER-MASTER/Sonidos/GameOver.wav", true);
                         Sprite spriteFin = new Sprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2,
                                 regionFin, actividadJuego.getVertexBufferObjectManager()) {
                             @Override
@@ -941,9 +1150,15 @@ private void crearEnemigos() {
                                 }
                                 return true; // return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
                             }
+
                         };
+
+                        txtPuntos.setText(" " + puntos);
                         registerTouchArea(spriteFin);
                         attachChild(spriteFin);
+                        txtPuntos = new Text(ControlJuego.ANCHO_CAMARA/2,(ControlJuego.ALTO_CAMARA/2)-320,
+                                fontMonster," "+puntos,actividadJuego.getVertexBufferObjectManager());
+                        attachChild(txtPuntos);
                     }
                 }
 

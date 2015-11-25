@@ -2,6 +2,8 @@ package mx.itesm.earthkeeper;
 
 import android.util.Log;
 
+import org.andengine.audio.sound.Sound;
+import org.andengine.audio.sound.SoundFactory;
 import org.andengine.engine.camera.Camera;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.Sprite;
@@ -73,6 +75,17 @@ public abstract class EscenaBase extends Scene
         };
     }
 
+    protected Sound cargarEfecto(String archivo) {
+        try {
+            Sound sonidoEfecto =
+                    SoundFactory.createSoundFromAsset(actividadJuego.getSoundManager(),
+                            actividadJuego, archivo );
+            return sonidoEfecto;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     protected Font cargarFont(String archivo, int tamanio, int color, String letras) {
         // La imagen que contiene cada símbolo

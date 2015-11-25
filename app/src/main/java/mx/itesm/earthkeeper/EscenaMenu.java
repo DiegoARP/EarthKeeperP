@@ -69,6 +69,7 @@ public class EscenaMenu extends EscenaBase
        // agregarFondoMenu();
         // Mostrar opciones de menú
         agregarMenu();
+        actividadJuego.reproducirMusica("EARTHKEEPER-MASTER/Sonidos/Menu.wav",true);
     }
 
     private void agregarFondoMenu() {
