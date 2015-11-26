@@ -41,7 +41,7 @@ public class EscenaHistoria extends EscenaBase {
     public void crearEscena() {
         spriteFondo = cargarSprite(ControlJuego.ANCHO_CAMARA/2, ControlJuego.ALTO_CAMARA/2, regionFondo);
         attachChild(spriteFondo);
-        SOS = cargarSprite((ControlJuego.ANCHO_CAMARA/2)-470, ControlJuego.ALTO_CAMARA/2, regionSOS);
+        SOS = cargarSprite((ControlJuego.ANCHO_CAMARA/2)-490, ControlJuego.ALTO_CAMARA/2, regionSOS);
         HowTo = cargarSprite(200,-230, regionHow);
 
 
@@ -76,7 +76,7 @@ public class EscenaHistoria extends EscenaBase {
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
 
-                if (pSceneTouchEvent.isActionDown()) {
+                if (pSceneTouchEvent.isActionDown()&& !HowTo.hasParent()) {
 
                     /*
                     detachChild(spriteL);
@@ -84,7 +84,7 @@ public class EscenaHistoria extends EscenaBase {
                     attachChild(spriteB);
                     return true;*/
                     attachChild(HowTo);
-                } else  if (pSceneTouchEvent.isActionUp()) {
+                } else  if (pSceneTouchEvent.isActionUp()&& HowTo.hasParent()) {
                     detachChild(HowTo);
                 }
 
