@@ -49,8 +49,8 @@ public class EscenaAcercaDe extends EscenaBase
         regionBtnL = cargarImagen("EARTHKEEPER-MASTER/Pantalla Galeria/botones/lumakaNom.png");
         regionBtnT = cargarImagen("EARTHKEEPER-MASTER/Pantalla Galeria/botones/theeNom.png");
         //Mosaicos
-        regionAnimadoB = cargarImagenMosaico("EARTHKEEPER-MASTER/Pantalla Galeria/b neet sprite (2).png",2313,	435,1,3);
-        regionAnimadoL = cargarImagenMosaico("EARTHKEEPER-MASTER/Pantalla Galeria/lumakaSprite.png",3840,800,1,3);
+        regionAnimadoB = cargarImagenMosaico("EARTHKEEPER-MASTER/Pantalla Galeria/b neet sprite (2).png", 2313, 435, 1, 3);
+        regionAnimadoL = cargarImagenMosaico("EARTHKEEPER-MASTER/Pantalla Galeria/lumakaSprite.png", 3840, 800, 1, 3);
         //
         Bnnet= cargarImagen("EARTHKEEPER-MASTER/Pantalla Galeria/b-neet1.png");
         Lumaka = cargarImagen("EARTHKEEPER-MASTER/Pantalla Galeria/lumaka1.png");
@@ -73,7 +73,7 @@ public class EscenaAcercaDe extends EscenaBase
 
         //Imagenes centrales
         spriteBnnet = cargarSprite((ControlJuego.ANCHO_CAMARA/2)-500,( ControlJuego.ALTO_CAMARA/2)-10, Bnnet);
-        spriteLumaka = cargarSprite(135, -260,Lumaka);
+        spriteLumaka = cargarSprite(125, -260,Lumaka);
         spriteKlaam = cargarSprite(500,200,Klaam);
         spriteThee = cargarSprite(-550,150,Thee);
 
@@ -85,7 +85,7 @@ public class EscenaAcercaDe extends EscenaBase
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
 
-                if (pSceneTouchEvent.isActionDown()) {
+                if (pSceneTouchEvent.isActionDown() && !spriteBnnet.hasParent()) {
 
 
                     //detachChild(spriteL);
@@ -94,7 +94,7 @@ public class EscenaAcercaDe extends EscenaBase
                    // return true;
                     //attachChild(spriteB);
                     //Log.i("xx", "1_attach spriteBnnet");
-                } else if (pSceneTouchEvent.isActionUp()){
+                } else if (pSceneTouchEvent.isActionUp() && spriteBnnet.hasParent() ){
                     detachChild(spriteBnnet);
                 }
 
@@ -120,18 +120,6 @@ public class EscenaAcercaDe extends EscenaBase
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
 
-               /* if (pSceneTouchEvent.isActionDown()) {
-
-                /*
-                        detachChild(spriteB);
-
-
-                    attachChild(spriteL);
-                    return true;
-                    attachChild(spriteLumaka);
-                    Log.i("xx", "1_attach spriteLumaka");
-                }*/
-
                 if (pSceneTouchEvent.isActionDown() && !spriteLumaka.hasParent() ) {
                     attachChild(spriteLumaka);
                 } else if (pSceneTouchEvent.isActionUp() && spriteLumaka.hasParent() ){
@@ -151,7 +139,7 @@ public class EscenaAcercaDe extends EscenaBase
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
 
-                if (pSceneTouchEvent.isActionDown()) {
+                if (pSceneTouchEvent.isActionDown() && !spriteKlaam.hasParent()) {
 
 
                     //detachChild(spriteL);
@@ -160,7 +148,7 @@ public class EscenaAcercaDe extends EscenaBase
                     // return true;
                     //attachChild(spriteB);
                     //Log.i("xx", "1_attach spriteBnnet");
-                } else if (pSceneTouchEvent.isActionUp()){
+                } else if (pSceneTouchEvent.isActionUp() && spriteKlaam.hasParent()){
                     detachChild(spriteKlaam);
                 }
 
@@ -176,7 +164,7 @@ public class EscenaAcercaDe extends EscenaBase
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
 
-                if (pSceneTouchEvent.isActionDown()) {
+                if (pSceneTouchEvent.isActionDown() && !spriteThee.hasParent()) {
 
 
                     //detachChild(spriteL);
@@ -185,7 +173,7 @@ public class EscenaAcercaDe extends EscenaBase
                     // return true;
                     //attachChild(spriteB);
                     //Log.i("xx", "1_attach spriteBnnet");
-                } else if (pSceneTouchEvent.isActionUp()){
+                } else if (pSceneTouchEvent.isActionUp() && spriteThee.hasParent()){
                     detachChild(spriteThee);
                 }
 
