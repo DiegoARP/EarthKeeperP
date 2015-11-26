@@ -41,7 +41,7 @@ public class EscenaHistoria extends EscenaBase {
     public void crearEscena() {
         spriteFondo = cargarSprite(ControlJuego.ANCHO_CAMARA/2, ControlJuego.ALTO_CAMARA/2, regionFondo);
         attachChild(spriteFondo);
-        SOS = cargarSprite((ControlJuego.ANCHO_CAMARA/2)-475, ControlJuego.ALTO_CAMARA/2, regionSOS);
+        SOS = cargarSprite((ControlJuego.ANCHO_CAMARA/2)-455, ControlJuego.ALTO_CAMARA/2, regionSOS);
         HowTo = cargarSprite(200,-230, regionHow);
 
 

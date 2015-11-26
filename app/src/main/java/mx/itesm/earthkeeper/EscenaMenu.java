@@ -47,7 +47,7 @@ public class EscenaMenu extends EscenaBase
     @Override
     public void cargarRecursos() {
         // Fondo
-        regionFondo = cargarImagen("Pantalla_Consola-FINAL.jpg");
+        regionFondo = cargarImagen("EARTHKEEPER-MASTER/Pantalla Principal/Pantalla_Consola.jpg");
         // Botones del menú
         regionBtnAcercaDe = cargarImagen("EARTHKEEPER-MASTER/Pantalla Principal/Gallery_Boton.png");
         regionBtnNueva = cargarImagen("EARTHKEEPER-MASTER/Pantalla Principal/Credits_Boton.png");

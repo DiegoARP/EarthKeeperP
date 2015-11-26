@@ -69,6 +69,7 @@ public class EscenaJuego extends EscenaBase {
     private Sprite spriteVida2;
     private Sprite spriteVida3;
     private int yolo=0;
+    private int colEscudo=0;
     //VIDA
     private int ANCHO_VIDA;
     private int vida;
@@ -153,6 +154,7 @@ public class EscenaJuego extends EscenaBase {
     //Efectos de sonido
     private Sound sonidoTierra;
     private Sound sonidoGameOver;
+    private Sound sonidoEscudo;
 
 
 
@@ -172,17 +174,17 @@ public class EscenaJuego extends EscenaBase {
         GalaxiaRojo = cargarImagen("Circulo_Amarillo.png");
         GalaxiaAmarillo = cargarImagen("Circulo_Amarillo.png");
         GalaxiaAzul = cargarImagen("Circulo_Amarillo.png");
-        Galaxias = cargarImagen("Galaxias_Juntas.png");
+        Galaxias = cargarImagen("EARTHKEEPER-MASTER/Pantalla Juego/Galaxias_Juntas.png");
         Tierra = cargarImagen("Tierra_NUEVA.png");
-        Marco = cargarImagen("MARCO-FINAL-REDONDO.png");
-        regionVerde = cargarImagen("Circular_Verde.png");
-        regionAzul = cargarImagen("Circular_Azul.png");
-        regionAmarillo = cargarImagen("Circular_Amarilo.png");
-        regionRojo = cargarImagen("Circular_Rojo.png");
+        Marco = cargarImagen("EARTHKEEPER-MASTER/Pantalla Juego/MARCO-FINAL-REDONDO.png");
+        regionVerde = cargarImagen("Naves/Circular_Verde.png");
+        regionAzul = cargarImagen("Naves/Circular_Azul.png");
+        regionAmarillo = cargarImagen("Naves/Circular_Amarilo.png");
+        regionRojo = cargarImagen("Naves/Circular_Rojo.png");
         regionFin = cargarImagen("EARTHKEEPER-MASTER/Pantalla Gameover/Pantalla_GAMEOVER.jpg");
-        Vida_uno = cargarImagen("VIDA_1.png");
-        Vida_dos = cargarImagen("VIDA_2.png");
-        Vida_tres = cargarImagen("VIDA_3.png");
+        Vida_uno = cargarImagen("EARTHKEEPER-MASTER/Pantalla Juego/VIDA_1.png");
+        Vida_dos = cargarImagen("EARTHKEEPER-MASTER/Pantalla Juego/VIDA_2.png");
+        Vida_tres = cargarImagen("EARTHKEEPER-MASTER/Pantalla Juego/VIDA_3.png");
         regionTVerde = cargarImagen("Naves/Triangular_Verde.png");
         regionTAzul = cargarImagen("Naves/Triangular_Azul.png");
         regionTAmarillo = cargarImagen("Naves/Triangular_Amarillo.png");
@@ -216,6 +218,7 @@ public class EscenaJuego extends EscenaBase {
         //Sonidos
         sonidoTierra = cargarEfecto("EARTHKEEPER-MASTER/Sonidos/Grito.wav");
         sonidoGameOver = cargarEfecto("EARTHKEEPER-MASTER/Sonidos/GameOver.wav");
+        sonidoEscudo = cargarEfecto("EARTHKEEPER-MASTER/Sonidos/Escudo.wav");
 
 
     }
@@ -328,6 +331,7 @@ private void crearEnemigos() {
     @Override
     public void crearEscena() {
         listaEnemigos = new ArrayList<>();
+        //listaU = new ArrayList<>();
         int z=0;
 
        // actualizarPuntos();
@@ -485,6 +489,7 @@ private void crearEnemigos() {
             detachChild(btnEscudo4);
             attachChild(btnEscudo5);
         } else if (puntos>=120  ){
+            colEscudo=3;
             final Sprite btnEscudo6 = new Sprite(regionBtnPausa.getWidth()/2+600, ControlJuego.ALTO_CAMARA - regionBtnPausa.getHeight()/2-640,
                     regionEscudo6, actividadJuego.getVertexBufferObjectManager()){
                 @Override
@@ -493,7 +498,8 @@ private void crearEnemigos() {
                     if (pSceneTouchEvent.isActionDown()) {
                         //escudo = new Sprite(spriteTierra.getX()-500, spriteTierra.getY()-100,
                               //  regionEscudoActivado, actividadJuego.getVertexBufferObjectManager());
-                        attachChild(escudo);
+                        sonidoEscudo.play();
+                        //attachChild(escudo);
                         yolo++;
 
                         return true;
@@ -742,6 +748,7 @@ private void crearEnemigos() {
                 //Log.i("onManagedUpdate","Moviendo...");
                 enemigoA.mover(spriteTierra.getX(), spriteTierra.getY());
                 if (enemigoA.getSpriteEnemigo().collidesWith(spriteTierra)){
+                    Log.i("xx","Colision Boss-Tierra");
                     vida-=2;
                     detachChild(enemigoA.getSpriteEnemigo());
                 }
@@ -959,6 +966,8 @@ private void crearEnemigos() {
                         //nuevoEnemigo.mover(0,10);
 
                         //Colisiones con escudo
+
+                        /*
                         if(nuevoEnemigo.getSpriteEnemigo().collidesWith(escudo)){
                             Log.i("xx","Colision Escudo");
                            contEscudo++;
@@ -966,12 +975,12 @@ private void crearEnemigos() {
                             if(contEscudo==3){
                                 detachChild(escudo);
                             }
-                        }
+                        }*/
 
                     listaEnemigos.add(nuevoEnemigo);    //	Lo	AGREGA	a	la	escena
 
 
-                boolean mGrabbed = false;
+               // boolean mGrabbed = false;
 
 
                 /*if (puntos>100 ) {
@@ -1005,20 +1014,7 @@ private void crearEnemigos() {
 
                 // Agrega al enemigo a posiciones aleatorias generadas
 
-                if (puntos<100) {
-                    if (var == 1) {
-                        // nuevoEnemigo.getSpriteEnemigo().setPosition(ControlJuego.ANCHO_CAMARA, -300);
-                        nuevoEnemigo.getSpriteEnemigo().setPosition(0, r1);
-                    } else if (var == 2) {
-                        nuevoEnemigo.getSpriteEnemigo().setPosition(ControlJuego.ANCHO_CAMARA, r2);
-                    } else if (var == 3) {
-                        nuevoEnemigo.getSpriteEnemigo().setPosition(r3, 0);
-                    } else if (var == 4) {
-                        nuevoEnemigo.getSpriteEnemigo().setPosition(r4, ControlJuego.ALTO_CAMARA);
-                    }
-
-
-                } else if (puntos >100) {
+                if (puntos>=0) {
                     if (var == 1) {
                         // nuevoEnemigo.getSpriteEnemigo().setPosition(ControlJuego.ANCHO_CAMARA, -300);
                         nuevoEnemigo.getSpriteEnemigo().setPosition(0, r1);
@@ -1034,7 +1030,24 @@ private void crearEnemigos() {
                         nuevoEnemigo.getSpriteEnemigo().setPosition(r3, 0);
                     }
 
-                } /*else if (puntos>200){
+
+                } /*else if (puntos >100) {
+                    if (var == 1) {
+                        // nuevoEnemigo.getSpriteEnemigo().setPosition(ControlJuego.ANCHO_CAMARA, -300);
+                        nuevoEnemigo.getSpriteEnemigo().setPosition(0, r1);
+                        nuevoEnemigo.getSpriteEnemigo().setPosition(ControlJuego.ANCHO_CAMARA, r2);
+                    } else if (var == 2) {
+                        nuevoEnemigo.getSpriteEnemigo().setPosition(ControlJuego.ANCHO_CAMARA, r2);
+                        nuevoEnemigo.getSpriteEnemigo().setPosition(0, r1);
+                    } else if (var == 3) {
+                        nuevoEnemigo.getSpriteEnemigo().setPosition(r3, 0);
+                        nuevoEnemigo.getSpriteEnemigo().setPosition(r4, ControlJuego.ALTO_CAMARA);
+                    } else if (var == 4) {
+                        nuevoEnemigo.getSpriteEnemigo().setPosition(r4, ControlJuego.ALTO_CAMARA);
+                        nuevoEnemigo.getSpriteEnemigo().setPosition(r3, 0);
+                    }*/
+
+                /*} else if (puntos>200){
                     if (var == 1) {
                         // nuevoEnemigo.getSpriteEnemigo().setPosition(ControlJuego.ANCHO_CAMARA, -300);
                         nuevoEnemigo.getSpriteEnemigo().setPosition(0, r1);
@@ -1064,11 +1077,23 @@ private void crearEnemigos() {
                 // MoveModifier mod1=new MoveModifier(50,0,ControlJuego.ALTO_CAMARA/2,50,ControlJuego.ANCHO_CAMARA/2);
                 //enemigo.getSpriteEnemigo().registerEntityModifier(mod1);
                 enemigo.mover(spriteTierra.getX(), spriteTierra.getY());
-
+                if(escudo==null){
+                    Log.i("xx","No hay escudo");
+                }
+               /* if(escudo.collidesWith(enemigo.getSpriteEnemigo())){
+                    Log.i("xx","Colision Escudo");
+                    contEscudo++;
+                    detachChild(enemigo.getSpriteEnemigo());
+                    listaEnemigos.remove(enemigo);
+                    if(contEscudo==3){
+                        detachChild(escudo);
+                    }
+                }*/
+                /*
                 if (enemigo.getSpriteEnemigo().getX() < -enemigo.getSpriteEnemigo().getWidth()) {
                     detachChild(enemigo.getSpriteEnemigo());        //	Lo	ELIMINA	de	la	escena
                     listaEnemigos.remove(enemigo);                                                                    //	Lo	ELIMINA	de	la	lista
-                }
+                }*/
                 //	Revisa	el	choque	del	personaje	con	el	enemigo
 
                 if (enemigo.getSpriteEnemigo().getTextureRegion() == regionVerde || enemigo.getSpriteEnemigo().getTextureRegion() == regionTVerde || enemigo.getSpriteEnemigo().getTextureRegion() == regionPVerde  ) {
@@ -1077,11 +1102,14 @@ private void crearEnemigos() {
                         detachChild(enemigo.getSpriteEnemigo());
                         listaEnemigos.remove(enemigo);
 
+
+
                     } else if (spriteGalaxiaAzul.collidesWith(enemigo.getSpriteEnemigo()) || spriteGalaxiaRojo.collidesWith(enemigo.getSpriteEnemigo())
                     ||spriteGalaxiaAmarillo.collidesWith(enemigo.getSpriteEnemigo())){
                         puntos-=5;
                         detachChild(enemigo.getSpriteEnemigo());
                         listaEnemigos.remove(enemigo);
+
                     }
                 }
 
@@ -1090,11 +1118,13 @@ private void crearEnemigos() {
                         puntos += 5;
                         detachChild(enemigo.getSpriteEnemigo());
                         listaEnemigos.remove(enemigo);
+
                     } else if (enemigo.getSpriteEnemigo().collidesWith(spriteGalaxiaVerde) || enemigo.getSpriteEnemigo().collidesWith(spriteGalaxiaRojo)
                             ||enemigo.getSpriteEnemigo().collidesWith(spriteGalaxiaAmarillo)){
                         puntos-=5;
                         detachChild(enemigo.getSpriteEnemigo());
                         listaEnemigos.remove(enemigo);
+
                     }
                 }
 
@@ -1103,11 +1133,13 @@ private void crearEnemigos() {
                         puntos += 5;
                         detachChild(enemigo.getSpriteEnemigo());
                         listaEnemigos.remove(enemigo);
+
                     } else if (enemigo.getSpriteEnemigo().collidesWith(spriteGalaxiaAzul) || enemigo.getSpriteEnemigo().collidesWith(spriteGalaxiaRojo)
                             ||enemigo.getSpriteEnemigo().collidesWith(spriteGalaxiaVerde)){
                         puntos-=5;
                         detachChild(enemigo.getSpriteEnemigo());
                         listaEnemigos.remove(enemigo);
+
                     }
                 }
 
@@ -1124,41 +1156,57 @@ private void crearEnemigos() {
                     }
                 }
 
-
+                int col = 0;
                 if (spriteTierra.collidesWith(enemigo.getSpriteEnemigo())) {
                     //sonidoGrito();
+                    //escudo.getTextureRegion().getTextureX()==spriteTierra.getX()-500
+                    if(colEscudo==3){
 
 
-                    detachChild(enemigo.getSpriteEnemigo());
-                    //listaEnemigos.remove(enemigo);
-                    vida--;
-                    if (vida == 2) {
-                        detachChild(spriteVida3);
-                    } else if (vida == 1) {
-                        detachChild(spriteVida2);
-                    } else if (vida == 0) {
-                        detachChild(spriteVida1);
-                        juegoCorriendo = false;
-                        //sonidoGameOver.play();
-                        actividadJuego.reproducirMusica("EARTHKEEPER-MASTER/Sonidos/GameOver.wav", true);
-                        Sprite spriteFin = new Sprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2,
-                                regionFin, actividadJuego.getVertexBufferObjectManager()) {
-                            @Override
-                            public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
-                                if (pSceneTouchEvent.isActionUp()) {
-                                    onBackKeyPressed();
+                        detachChild(enemigo.getSpriteEnemigo());
+                        col++;
+                        colEscudo--;
+                        colEscudo=0;
+                        Log.i("xx", " Colision al escudo__@");
+                        if(col==3){
+                            colEscudo=0;
+                            detachChild(escudo);
+                        }
+                    } else if (col==3 || colEscudo==0) {
+                        colEscudo=0;
+
+                        detachChild(enemigo.getSpriteEnemigo());
+                        //listaEnemigos.remove(enemigo);
+                        vida--;
+                        if (vida == 2) {
+                            detachChild(spriteVida3);
+                        } else if (vida == 1) {
+                            detachChild(spriteVida2);
+                        } else if (vida == 0) {
+                            detachChild(spriteVida1);
+                            juegoCorriendo = false;
+                            //sonidoGameOver.play();
+                            //actividadJuego.reproducirMusica("EARTHKEEPER-MASTER/Sonidos/GameOver.wav", true);
+                            Sprite spriteFin = new Sprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2,
+                                    regionFin, actividadJuego.getVertexBufferObjectManager()) {
+                                @Override
+                                public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
+                                    if (pSceneTouchEvent.isActionUp()) {
+                                        onBackKeyPressed();
+                                    }
+                                    return true; // return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
                                 }
-                                return true; // return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
-                            }
 
-                        };
+                            };
 
-                        txtPuntos.setText(" " + puntos);
-                        registerTouchArea(spriteFin);
-                        attachChild(spriteFin);
-                        txtPuntos = new Text(ControlJuego.ANCHO_CAMARA/2,(ControlJuego.ALTO_CAMARA/2)-320,
-                                fontMonster," "+puntos,actividadJuego.getVertexBufferObjectManager());
-                        attachChild(txtPuntos);
+                            txtPuntos.setText(" " + puntos);
+                            registerTouchArea(spriteFin);
+                            attachChild(spriteFin);
+                            txtPuntos = new Text(ControlJuego.ANCHO_CAMARA / 2, (ControlJuego.ALTO_CAMARA / 2) - 320,
+                                    fontMonster, " " + puntos, actividadJuego.getVertexBufferObjectManager());
+                            attachChild(txtPuntos);
+                        }
+
                     }
                 }
 

@@ -5,6 +5,7 @@ import android.util.Log;
 import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
+import org.andengine.opengl.texture.ITexture;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.TiledTextureRegion;
 
@@ -33,6 +34,10 @@ public class EscenaAcercaDe extends EscenaBase
     private ITextureRegion Bnnet;
     private Sprite spriteLumaka;
     private ITextureRegion Lumaka;
+    private Sprite spriteKlaam;
+    private ITextureRegion Klaam;
+    private Sprite spriteThee;
+    private ITextureRegion Thee;
 
     @Override
     public void cargarRecursos() {
@@ -46,8 +51,11 @@ public class EscenaAcercaDe extends EscenaBase
         //Mosaicos
         regionAnimadoB = cargarImagenMosaico("EARTHKEEPER-MASTER/Pantalla Galeria/b neet sprite (2).png",2313,	435,1,3);
         regionAnimadoL = cargarImagenMosaico("EARTHKEEPER-MASTER/Pantalla Galeria/lumakaSprite.png",3840,800,1,3);
+        //
         Bnnet= cargarImagen("EARTHKEEPER-MASTER/Pantalla Galeria/b-neet1.png");
         Lumaka = cargarImagen("EARTHKEEPER-MASTER/Pantalla Galeria/lumaka1.png");
+        Klaam = cargarImagen("EARTHKEEPER-MASTER/Pantalla Galeria/klaam1.png");
+        Thee = cargarImagen("EARTHKEEPER-MASTER/Pantalla Galeria/thee1.png");
 
     }
 
@@ -58,13 +66,16 @@ public class EscenaAcercaDe extends EscenaBase
     public void crearEscena() {
         spriteFondo = cargarSprite(ControlJuego.ANCHO_CAMARA/2, ControlJuego.ALTO_CAMARA/2, regionFondo);
         //Animados
-        spriteB	=	new	AnimatedSprite(ControlJuego.ANCHO_CAMARA/2,
-                (ControlJuego.ALTO_CAMARA/2),	regionAnimadoB,
+        spriteB	=	new	AnimatedSprite((ControlJuego.ANCHO_CAMARA/2)-500,
+                (ControlJuego.ALTO_CAMARA/2),regionAnimadoB,
                 actividadJuego.getVertexBufferObjectManager());
         spriteB.animate(200);
 
-        spriteBnnet = cargarSprite((ControlJuego.ANCHO_CAMARA/2)-500, ControlJuego.ALTO_CAMARA/2, Bnnet);
-        spriteLumaka = cargarSprite(200, -230,Lumaka);
+        //Imagenes centrales
+        spriteBnnet = cargarSprite((ControlJuego.ANCHO_CAMARA/2)-500,( ControlJuego.ALTO_CAMARA/2)-10, Bnnet);
+        spriteLumaka = cargarSprite(135, -260,Lumaka);
+        spriteKlaam = cargarSprite(500,200,Klaam);
+        spriteThee = cargarSprite(-550,150,Thee);
 
 
         //Botones
@@ -76,19 +87,19 @@ public class EscenaAcercaDe extends EscenaBase
 
                 if (pSceneTouchEvent.isActionDown()) {
 
-                    /*
-                    detachChild(spriteL);
 
-                    attachChild(spriteB);
-                    return true;*/
-                    attachChild(spriteB);
+                    //detachChild(spriteL);
+
+                    attachChild(spriteBnnet);
+                   // return true;
+                    //attachChild(spriteB);
                     //Log.i("xx", "1_attach spriteBnnet");
                 } else if (pSceneTouchEvent.isActionUp()){
-                    detachChild(spriteB);
+                    detachChild(spriteBnnet);
                 }
 
 
-              return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
+              return true; //return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
             }
         };
         attachChild(spriteFondo);
@@ -109,26 +120,82 @@ public class EscenaAcercaDe extends EscenaBase
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
 
-                if (pSceneTouchEvent.isActionDown()) {
+               /* if (pSceneTouchEvent.isActionDown()) {
 
                 /*
                         detachChild(spriteB);
 
 
                     attachChild(spriteL);
-                    return true;*/
+                    return true;
                     attachChild(spriteLumaka);
                     Log.i("xx", "1_attach spriteLumaka");
+                }*/
+
+                if (pSceneTouchEvent.isActionDown() && !spriteLumaka.hasParent() ) {
+                    attachChild(spriteLumaka);
+                } else if (pSceneTouchEvent.isActionUp() && spriteLumaka.hasParent() ){
+                    detachChild(spriteLumaka);
                 }
 
 
-                return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
+                return true; //return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
             }
         };
         attachChild(spriteLA);
         registerTouchArea(spriteLA);
+        //-525,-30
+        Sprite spriteKA = new Sprite((ControlJuego.ANCHO_CAMARA/2)-525,
+                (ControlJuego.ALTO_CAMARA/2)-10, regionBtnK, actividadJuego.getVertexBufferObjectManager()) {
 
-        int nada=0;
+            @Override
+            public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
+
+                if (pSceneTouchEvent.isActionDown()) {
+
+
+                    //detachChild(spriteL);
+
+                    attachChild(spriteKlaam);
+                    // return true;
+                    //attachChild(spriteB);
+                    //Log.i("xx", "1_attach spriteBnnet");
+                } else if (pSceneTouchEvent.isActionUp()){
+                    detachChild(spriteKlaam);
+                }
+
+
+                return true; //return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
+            }
+        };
+        attachChild(spriteKA);
+        registerTouchArea(spriteKA);
+        Sprite spriteTA = new Sprite((ControlJuego.ANCHO_CAMARA/2)+520,
+                (ControlJuego.ALTO_CAMARA/2)-30, regionBtnT, actividadJuego.getVertexBufferObjectManager()) {
+
+            @Override
+            public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
+
+                if (pSceneTouchEvent.isActionDown()) {
+
+
+                    //detachChild(spriteL);
+
+                    attachChild(spriteThee);
+                    // return true;
+                    //attachChild(spriteB);
+                    //Log.i("xx", "1_attach spriteBnnet");
+                } else if (pSceneTouchEvent.isActionUp()){
+                    detachChild(spriteThee);
+                }
+
+
+                return true; //return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
+            }
+        };
+        attachChild(spriteTA);
+        registerTouchArea(spriteTA);
+
 
     }
 
