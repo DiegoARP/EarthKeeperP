@@ -1,2 +1,2 @@
 # EarthKeeperP
-Android Game - Earth Keeper.
+Android Game -- Earth Keeper.
